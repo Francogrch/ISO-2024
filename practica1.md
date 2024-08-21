@@ -550,7 +550,11 @@ El proceso de apagado de un sistema GNU/Linux sigue estos pasos:
 Sí, es posible tener en una PC GNU/Linux junto con otro sistema operativo (como Windows o macOS) en una configuración conocida como **dual-boot** o **multi-boot**. Esto se logra particionando el disco para que cada sistema operativo tenga su propia partición dedicada. El gestor de arranque, como GRUB, se encarga de gestionar el proceso de arranque, permitiendo al usuario seleccionar cuál sistema operativo cargar al iniciar la computadora.
 
 La justificación para utilizar un sistema de arranque dual podría incluir la necesidad de utilizar software específico para cada sistema operativo o la preferencia por un entorno diferente según la tarea en cuestión.
-
+## 9. Archivos:
+### (a) ¿Cómo se identifican los archivos en GNU/Linux?
+### (b) Investigue el funcionamiento de los editores vi y mcedit, y los comandos cat y more.
+### (c) Cree un archivo llamado “prueba.exe” en su directorio personal usando el vi. El mismo debe contener su número de alumno y su nombre.
+### (d) Investigue el funcionamiento del comando file. Pruébelo con diferentes archivos. ¿Qué diferencia nota?
 
 ## 10. Indique qué comando es necesario utilizar para realizar cada una de las siguientes acciones. Investigue su funcionamiento y parámetros más importantes:
 ### (a) Cree la carpeta ISO2017
