@@ -550,39 +550,304 @@ El proceso de apagado de un sistema GNU/Linux sigue estos pasos:
 Sí, es posible tener en una PC GNU/Linux junto con otro sistema operativo (como Windows o macOS) en una configuración conocida como **dual-boot** o **multi-boot**. Esto se logra particionando el disco para que cada sistema operativo tenga su propia partición dedicada. El gestor de arranque, como GRUB, se encarga de gestionar el proceso de arranque, permitiendo al usuario seleccionar cuál sistema operativo cargar al iniciar la computadora.
 
 La justificación para utilizar un sistema de arranque dual podría incluir la necesidad de utilizar software específico para cada sistema operativo o la preferencia por un entorno diferente según la tarea en cuestión.
+
+
 ## 9. Archivos:
+
 ### (a) ¿Cómo se identifican los archivos en GNU/Linux?
+
+En GNU/Linux, los archivos se identifican principalmente mediante **nombres de archivo** y **rutas**. Cada archivo tiene una ruta que puede ser absoluta (comenzando desde el directorio raíz `/`, como `/home/usuario/documento.txt`) o relativa (desde el directorio actual, como `documento.txt`). 
+
+Cada archivo también tiene un **inode**, que es una estructura de datos que almacena metadatos sobre el archivo, como permisos, propietario, tamaño y ubicación en el sistema de archivos, pero no su nombre. El nombre del archivo es una entrada en el directorio que se refiere a su inode.
+
 ### (b) Investigue el funcionamiento de los editores vi y mcedit, y los comandos cat y more.
+
+- **vi:**
+  - **Descripción:** `vi` es un editor de texto modal. Tiene dos modos principales: el modo de comando (para ejecutar comandos) y el modo de inserción (para editar texto).
+  - **Uso básico:**
+    - Para abrir un archivo: `vi nombre_del_archivo`
+    - En modo de inserción: Presionar `i` para comenzar a editar.
+    - Para guardar y salir: Presionar `Esc`, luego escribir `:wq` y presionar `Enter`.
+
+- **mcedit:**
+  - **Descripción:** `mcedit` es el editor de texto de Midnight Commander, un administrador de archivos con interfaz basada en texto. Es más intuitivo que `vi` y proporciona una interfaz gráfica simple.
+  - **Uso básico:**
+    - Para abrir un archivo: `mcedit nombre_del_archivo`
+    - Guardar cambios: Presionar `F2`.
+    - Salir del editor: Presionar `F10`.
+
+- **cat:**
+  - **Descripción:** `cat` (concatenate) es un comando para mostrar el contenido de archivos en la terminal o concatenar varios archivos.
+  - **Uso básico:**
+    - Mostrar el contenido de un archivo: `cat archivo.txt`
+    - Concatenar varios archivos: `cat archivo1.txt archivo2.txt > archivo_concatenado.txt`
+
+- **more:**
+  - **Descripción:** `more` es un comando para visualizar archivos de texto en páginas, permitiendo avanzar página por página.
+  - **Uso básico:**
+    - Mostrar un archivo con paginación: `more archivo.txt`
+    - Navegar con la barra espaciadora para avanzar una página, y `b` para retroceder.
+
 ### (c) Cree un archivo llamado “prueba.exe” en su directorio personal usando el vi. El mismo debe contener su número de alumno y su nombre.
+
+        nvim prueba.exe
+        :wq!
 ### (d) Investigue el funcionamiento del comando file. Pruébelo con diferentes archivos. ¿Qué diferencia nota?
+
+**Funcionamiento del comando `file`:**
+
+El comando `file` determina el tipo de un archivo examinando su contenido en lugar de basarse únicamente en la extensión del archivo. Este comando utiliza una base de datos de firmas de archivos para identificar el tipo de datos que contiene un archivo. 
+Diferencias observadas:
+
+- Dependencia de la extensión: A diferencia de los sistemas que se basan en extensiones de archivo, el comando file no depende de la extensión para identificar el tipo de archivo. Por ejemplo, un archivo .jpg que en realidad es un archivo de texto será identificado correctamente como texto, mientras que un archivo .txt que es binario también será identificado adecuadamente.
+- Identificación precisa: file puede identificar el contenido real del archivo, lo que es útil para tratar con archivos que han sido renombrados o que no tienen una extensión que refleje su contenido.
+- Versatilidad: El comando puede reconocer una amplia variedad de formatos de archivo, desde texto y scripts hasta imágenes y documentos complejos como PDF, proporcionando una descripción detallada basada en el contenido del archivo.
 
 ## 10. Indique qué comando es necesario utilizar para realizar cada una de las siguientes acciones. Investigue su funcionamiento y parámetros más importantes:
 ### (a) Cree la carpeta ISO2017
+        mkdir ISO2017
 ### (b) Acceda a la carpeta (cd)
+        cd ISO2017
 ### (c) Cree dos archivos con los nombres iso2017-1 e iso2017-2 (touch)
-### (d) Liste el contenido del directorio actual (ls)
+        touch iso2017-1 && touch iso2017-2
+### (d) Liste el contenido del directorio actual (ls)]
+        ls
 ### (e) Visualizar la ruta donde estoy situado (pwd)
+        pwd
 ### (f) Busque todos los archivos en los que su nombre contiene la cadena “iso*” (find)
+        find . -name '*iso*'
 ### (g) Informar la cantidad de espacio libre en disco (df)
+        df -h
 ### (h) Verifique los usuarios conectado al sistema (who)
+        who
 ### (i) Acceder a el archivo iso2017-1 e ingresar Nombre y Apellido
+        nvim iso2017-1
+        :wq!
 ### (j) Mostrar en pantalla las últimas líneas de un archivo (tail).
+        tail iso2017-1
+
 ## 11. Investigue su funcionamiento y parámetros más importantes:
-### (a) shutdown
-### (b) reboot
-### (c) halt
-### (d) locate
-### (e) uname
-### (f) gmesg
-### (g) lspci
-### (h) at
-### (i) netstat
-### (j) mount
-### (k) umount
-### (l) head
-### (m) losetup
-### (n) write
-### (ñ) mkfs
-### (o) fdisk (con cuidado)
+
+### (a) `shutdown`
+- **Descripción:** `shutdown` se utiliza para apagar o reiniciar el sistema de manera segura. Finaliza todos los procesos antes de apagar el sistema, lo que previene la pérdida de datos.
+- **Sintaxis básica:**
+  ```bash
+  shutdown [opciones] [tiempo] [mensaje]
+  ```
+- **Parámetros importantes:**
+  - `-h`: Apaga el sistema.
+  - `-r`: Reinicia el sistema después del apagado.
+  - `-c`: Cancela un apagado o reinicio programado.
+  - `+m`: Define el tiempo de espera en minutos antes de apagar o reiniciar el sistema.
+  - `now`: Apaga o reinicia el sistema de manera inmediata.
+
+### (b) `reboot`
+- **Descripción:** `reboot` reinicia el sistema de manera inmediata, sin invocar necesariamente a `shutdown`.
+- **Sintaxis básica:**
+  ```bash
+  reboot [opciones]
+  ```
+- **Parámetros importantes:**
+  - `-f`: Fuerza el reinicio del sistema sin realizar un apagado limpio.
+  - `-p`: Apaga el sistema de manera similar a `poweroff`.
+
+### (c) `halt`
+- **Descripción:** `halt` detiene todas las operaciones del sistema, detiene la CPU y apaga la máquina.
+- **Sintaxis básica:**
+  ```bash
+  halt [opciones]
+  ```
+- **Parámetros importantes:**
+  - `-f`: Fuerza la detención del sistema sin realizar un apagado limpio.
+  - `-p`: Apaga el sistema por completo, similar a `poweroff`.
+
+### (d) `locate`
+- **Descripción:** `locate` busca archivos en la base de datos del sistema de archivos, lo que hace la búsqueda muy rápida.
+- **Sintaxis básica:**
+  ```bash
+  locate [opciones] nombre_del_archivo
+  ```
+- **Parámetros importantes:**
+  - `-i`: Realiza la búsqueda sin diferenciar entre mayúsculas y minúsculas.
+  - `-n N`: Muestra solo los primeros `N` resultados.
+
+### (e) `uname`
+- **Descripción:** `uname` muestra información sobre el sistema operativo y el kernel.
+- **Sintaxis básica:**
+  ```bash
+  uname [opciones]
+  ```
+- **Parámetros importantes:**
+  - `-a`: Muestra toda la información disponible del sistema.
+  - `-r`: Muestra la versión del kernel.
+  - `-m`: Muestra el tipo de arquitectura del sistema.
+
+### (f) `dmesg`
+- **Descripción:** `dmesg` muestra mensajes del kernel, que son útiles para diagnosticar problemas del hardware y del sistema.
+- **Sintaxis básica:**
+  ```bash
+  dmesg [opciones]
+  ```
+- **Parámetros importantes:**
+  - `-C`: Borra el búfer de mensajes del kernel.
+  - `-T`: Muestra las marcas de tiempo en formato legible.
+
+### (g) `lspci`
+- **Descripción:** `lspci` lista todos los dispositivos PCI conectados al sistema.
+- **Sintaxis básica:**
+  ```bash
+  lspci [opciones]
+  ```
+- **Parámetros importantes:**
+  - `-v`: Muestra información detallada de los dispositivos PCI.
+  - `-k`: Muestra los controladores asociados a los dispositivos PCI.
+
+### (h) `at`
+- **Descripción:** `at` programa la ejecución de comandos en un momento específico en el futuro.
+- **Sintaxis básica:**
+  ```bash
+  at [hora]
+  ```
+- **Parámetros importantes:**
+  - `-l`: Lista los trabajos programados.
+  - `-c`: Muestra el contenido de un trabajo programado.
+
+### (i) `netstat`
+- **Descripción:** `netstat` muestra estadísticas de red, conexiones activas y tablas de enrutamiento.
+- **Sintaxis básica:**
+  ```bash
+  netstat [opciones]
+  ```
+- **Parámetros importantes:**
+  - `-a`: Muestra todas las conexiones activas y los puertos de escucha.
+  - `-r`: Muestra la tabla de enrutamiento del kernel.
+  - `-t`: Muestra solo conexiones TCP.
+
+### (j) `mount`
+- **Descripción:** `mount` monta un sistema de archivos, permitiendo el acceso a dispositivos de almacenamiento.
+- **Sintaxis básica:**
+  ```bash
+  mount [opciones] dispositivo punto_de_montaje
+  ```
+- **Parámetros importantes:**
+  - `-o ro`: Monta el sistema de archivos en modo de solo lectura.
+  - `-t tipo_fs`: Especifica el tipo de sistema de archivos (e.g., `ext4`, `vfat`).
+
+### (k) `umount`
+- **Descripción:** `umount` desmonta un sistema de archivos, asegurando que todos los datos sean escritos en el dispositivo.
+- **Sintaxis básica:**
+  ```bash
+  umount [opciones] punto_de_montaje
+  ```
+- **Parámetros importantes:**
+  - `-f`: Fuerza el desmontaje de un sistema de archivos.
+  - `-l`: Desmonta un sistema de archivos de manera "perezosa", es decir, una vez que ya no esté en uso.
+
+### (l) `head`
+- **Descripción:** `head` muestra las primeras líneas de un archivo.
+- **Sintaxis básica:**
+  ```bash
+  head [opciones] archivo
+  ```
+- **Parámetros importantes:**
+  - `-n N`: Muestra las primeras `N` líneas del archivo.
+  - `-c N`: Muestra los primeros `N` caracteres del archivo.
+
+### (m) `losetup`
+- **Descripción:** `losetup` asocia un archivo de dispositivo de bucle (loop device) con un archivo o dispositivo de bloque.
+- **Sintaxis básica:**
+  ```bash
+  losetup [opciones] dispositivo archivo
+  ```
+- **Parámetros importantes:**
+  - `-f`: Busca el primer dispositivo de bucle disponible.
+  - `-d`: Desasocia el dispositivo de bucle.
+
+### (n) `write`
+- **Descripción:** `write` permite enviar mensajes a otro usuario conectado al sistema.
+- **Sintaxis básica:**
+  ```bash
+  write usuario [tty]
+  ```
+- **Parámetros importantes:**
+  - No tiene opciones importantes, se utiliza directamente escribiendo el mensaje después de invocar el comando.
+
+### (ñ) `mkfs`
+- **Descripción:** `mkfs` (make filesystem) se utiliza para crear un sistema de archivos en una partición o dispositivo.
+- **Sintaxis básica:**
+  ```bash
+  mkfs [opciones] tipo_fs dispositivo
+  ```
+- **Parámetros importantes:**
+  - `-t tipo_fs`: Especifica el tipo de sistema de archivos a crear (e.g., `ext4`, `xfs`).
+
+### (o) `fdisk` (con cuidado)
+- **Descripción:** `fdisk` es una herramienta para gestionar particiones en discos duros. Puede crear, eliminar, redimensionar y listar particiones.
+- **Sintaxis básica:**
+  ```bash
+  fdisk [opciones] dispositivo
+  ```
+- **Parámetros importantes:**
+  - `-l`: Lista las particiones en todos los discos.
+  - `-n`: Crea una nueva partición.
+  - **Precaución:** El uso incorrecto de `fdisk` puede llevar a la pérdida de datos, ya que manipula las tablas de particiones del disco.
+
+
 ## 12. Investigue su funcionamiento y parámetros más importantes:
+
 ### (a) Indique en qué directorios se almacenan los comandos mencionados en el ejercicio anterior
+
+En GNU/Linux, los comandos se almacenan en varios directorios estándar del sistema. Los más comunes son `/bin`, `/sbin`, `/usr/bin`, `/usr/sbin`, y algunos otros dependiendo de la distribución y la configuración. A continuación se detallan los directorios donde se encuentran generalmente los comandos mencionados en el ejercicio anterior:
+
+1. **`shutdown`**:  
+   - Ubicación: `/sbin/shutdown`
+  
+2. **`reboot`**:  
+   - Ubicación: `/sbin/reboot`
+
+3. **`halt`**:  
+   - Ubicación: `/sbin/halt`
+
+4. **`locate`**:  
+   - Ubicación: `/usr/bin/locate`
+
+5. **`uname`**:  
+   - Ubicación: `/bin/uname`
+
+6. **`dmesg`**:  
+   - Ubicación: `/bin/dmesg`
+
+7. **`lspci`**:  
+   - Ubicación: `/usr/bin/lspci`
+
+8. **`at`**:  
+   - Ubicación: `/usr/bin/at`
+
+9. **`netstat`**:  
+   - Ubicación: `/bin/netstat`
+
+10. **`mount`**:  
+    - Ubicación: `/bin/mount`
+
+11. **`umount`**:  
+    - Ubicación: `/bin/umount`
+
+12. **`head`**:  
+    - Ubicación: `/usr/bin/head`
+
+13. **`losetup`**:  
+    - Ubicación: `/sbin/losetup`
+
+14. **`write`**:  
+    - Ubicación: `/usr/bin/write`
+
+15. **`mkfs`**:  
+    - Ubicación: `/sbin/mkfs`
+
+16. **`fdisk`**:  
+    - Ubicación: `/sbin/fdisk`
+
+### Nota:
+- Los comandos ubicados en `/sbin` suelen requerir permisos de superusuario, ya que están destinados a tareas administrativas del sistema.
+- Los comandos en `/bin` y `/usr/bin` pueden ser ejecutados por cualquier usuario del sistema, siempre y cuando tengan los permisos necesarios para ello.
+
