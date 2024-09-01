@@ -9,8 +9,7 @@ Práctica 2
 La diferencia esta en que cat, more y less imprimen en pantalla, mientroas que los editores permiten modificar el archivo.
 Modos de operacion: Normal, Insertal, Visual.
 ### (c) Nombre los comandos más comunes que se le pueden enviar al editor de textos vi.
-Comandos:
-:w - write 
+Comandos: :w - write 
 :/ - buscar
 :q - quit
 :x - save and exit
@@ -610,184 +609,243 @@ Al empaquetarlos, noto que el archivo comprimir.tar pesa lo mismo que la suma de
     - **Ejemplo:** `wc -l archivo.txt` (muestra el número de líneas en `archivo.txt`).
 
 ## 8. Indique qué acción realiza cada uno de los comandos indicados a continuación considerando su orden. Suponga que se ejecutan desde un usuario que no es root ni pertenece al grupo de root. (Asuma que se encuentra posicionado en el directorio de trabajo del usuario con el que se logueó). En caso de no poder ejecutarse el comando, indique la razón:
-- ls −l > prueba
-Lista los elementos de directorio actual con informacion adicional y lo guarda en un archivo llamado prueba
-- ps > PRUEBA
-Guarda en archivo llamado PRUEBA una instantanea de los procesos que se encuntran activos y en foregorund
-- chmod 710 prueba
-Modifica los permisos del archivo prueba, al owner le da RWX al grupo solo Lectura y a los demas no le da ningun permiso
-- chown root:root PRUEBA
-Cambia el owner del archivo PRUEBA, dandosela al root
-- chmod 777 PRUEBA
-Modifica los permisos, le da RWX al owner, grupo y a los demas
-- chmod 700 /etc/passwd
-Le da permisos de RWX solamente al owner, al archivo passwd 
-- passwd root 
-Para modificar la contrasenia de root
-- rm PRUEBA
-Elimina el archivo PRUEBA
-- man /etc/shadow
-muestra en pantalla el texo del archivo shadow 
-- find / −name ∗ .conf
-Retorna todos los archivos .conf buscando desde la raiz
-- usermod root −d /home/ newroot −L
-- cd /root 
-- rm ∗
-- cd /etc
-- cp ∗ /home −R
-- shutdown
 
-9. Indique qué comando sería necesario ejecutar para realizar cada una de las siguientes acciones:
-(a) Terminar el proceso con PID 23.
-(b) Terminar el proceso llamado init o systemd. ¿Qué resultados obtuvo?
-(c) Buscar todos los archivos de usuarios en los que su nombre contiene la cadena “.conf”
-(d) Guardar una lista de procesos en ejecución el archivo /home/<su nombre de usuario>/procesos
-(e) Cambiar los permisos del archivo /home/<su nombre de usuario>/xxxx a:
-Usuario: Lectura, escritura, ejecución
-Grupo: Lectura, ejecución
-Otros: ejecución
-(f) Cambiar los permisos del archivo /home/<su nombre de usuario>/yyyy a:
-Usuario: Lectura, escritura.
-Grupo: Lectura, ejecución
-Otros: Ninguno
-(g) Borrar todos los archivos del directorio /tmp
-(h) Cambiar el propietario del archivo /opt/isodata al usuario iso2010
-(i) Guardar en el archivo /home/<su nombre de usuario>/donde el directorio donde
-me encuentro en este momento, en caso de que el archivo exista no se debe eliminar
-su contenido anterior.
-10. Indique qué comando sería necesario ejecutar para realizar cada una de las siguientes acciones:
-(a) Ingrese al sistema como usuario “root”
-(b) Cree un usuario. Elija como nombre, por convención, la primer letra de su nombre
-seguida de su apellido. Asígnele una contraseña de acceso.
-Pág. 4
 
-UNLP |Facultad de Informática
+1. **`ls -l > prueba`**  
+   - **Acción:** Lista los elementos del directorio actual en formato largo (detallado) y redirige la salida al archivo `prueba`.
+   - **Ejecución exitosa:** Sí. El usuario no necesita permisos especiales para listar archivos en su propio directorio y redirigir la salida a un archivo.
 
-ISO 2024 | Práctica 2
+2. **`ps > PRUEBA`**  
+   - **Acción:** Guarda en el archivo `PRUEBA` una instantánea de los procesos que se encuentran en ejecución en el sistema.
+   - **Ejecución exitosa:** Sí. El comando `ps` muestra los procesos del usuario actual y no requiere permisos especiales.
 
-(c) ¿Qué archivos fueron modificados luego de crear el usuario y qué directorios se crearon?
-(d) Crear un directorio en /tmp llamado cursada2017
-(e) Copiar todos los archivos de /var/log al directorio antes creado.
-(f) Para el directorio antes creado (y los archivos y subdirectorios contenidos en él) cambiar
-el propietario y grupo al usuario creado y grupo users.
-(g) Agregue permiso total al dueño, de escritura al grupo y escritura y ejecución a todos
-los demás usuarios para todos los archivos dentro de un directorio en forma recursiva.
-(h) Acceda a otra terminal virtual para loguearse con el usuario antes creado.
-(i) Una vez logueado con el usuario antes creado, averigüe cuál es el nombre de su terminal.
-(j) Verifique la cantidad de procesos activos que hay en el sistema.
-(k) Verifiqué la cantidad de usuarios conectados al sistema.
-(l) Vuelva a la terminal del usuario root, y envíele un mensaje al usuario anteriormente
-creado, avisándole que el sistema va a ser apagado.
-(m) Apague el sistema.
-11. Indique qué comando sería necesario ejecutar para realizar cada una de las siguientes acciones:
-(a) Cree un directorio cuyo nombre sea su número de legajo e ingrese a él.
-(b) Cree un archivo utilizando el editor de textos vi, e introduzca su información personal:
-Nombre, Apellido, Número de alumno y dirección de correo electrónico. El archivo
-debe llamarse "LEAME".
-(c) Cambie los permisos del archivo LEAME, de manera que se puedan ver reflejados los
-siguientes permisos:
-Dueño: ningún permiso
-Grupo: permiso de ejecución
-Otros: todos los permisos
-(d) Vaya al directorio /etc y verifique su contenido. Cree un archivo dentro de su directorio
-personal cuyo nombre sea leame donde el contenido del mismo sea el listado de todos
-los archivos y directorios contenidos en /etc. ¿Cuál es la razón por la cuál puede crear
-este archivo si ya existe un archivo llamado "LEAME.en este directorio?.
-(e) ¿Qué comando utilizaría y de qué manera si tuviera que localizar un archivo dentro
-del filesystem? ¿Y si tuviera que localizar varios archivos con características similares?
-Explique el concepto teórico y ejemplifique.
-(f) Utilizando los conceptos aprendidos en el punto e), busque todos los archivos cuya
-extensión sea .so y almacene el resultado de esta búsqueda en un archivo dentro del
-directorio creado en a). El archivo deberá llamarse .ejercicio_f".
-12. Indique qué acción realiza cada uno de los comandos indicados a continuación considerando
-su orden. Suponga que se ejecutan desde un usuario que no es root ni pertenece al grupo
-de root. (Asuma que se encuentra posicionado en el directorio de trabajo del usuario con el
-que se logueó). En caso de no poder ejecutarse el comando indique la razón:
-mkdir i s o
-cd . / i s o ; ps > f 0
-l s > f1
-cd /
-echo $HOME
-Pág. 5
+3. **`chmod 710 prueba`**  
+   - **Acción:** Modifica los permisos del archivo `prueba`, otorgando permisos de lectura, escritura y ejecución (rwx) al propietario, permisos de ejecución (x) al grupo y sin permisos para otros usuarios.
+   - **Ejecución exitosa:** Sí, el usuario que creó el archivo `prueba` tiene permisos para cambiar los permisos del mismo.
 
-UNLP |Facultad de Informática
+4. **`chown root:root PRUEBA`**  
+   - **Acción:** Intenta cambiar el propietario y el grupo del archivo `PRUEBA` al usuario y grupo `root`.
+   - **Ejecución fallida:** No. Solo el superusuario (root) puede cambiar la propiedad de los archivos. El comando fallará con un error de permisos.
 
-ISO 2024 | Práctica 2
+5. **`chmod 777 PRUEBA`**  
+   - **Acción:** Modifica los permisos del archivo `PRUEBA`, otorgando permisos de lectura, escritura y ejecución (rwx) al propietario, al grupo y a todos los demás usuarios.
+   - **Ejecución exitosa:** Sí, el usuario puede cambiar los permisos del archivo `PRUEBA` ya que es su propietario.
 
-l s − l $> $HOME/ i s o / l s
-cd $HOME; mkdir f 2
-l s −l d f 2
-chmod 341 f 2
-touch d i r
-cd f 2
-cd ~/ i s o
-pwd >f 3
-ps | g r e p ' ps ' | wc − l >> . . / f 2 / f 3
-chmod 700 . . / f 2 ; cd . .
-f i n d . −name e t c / passwd
-f i n d / −name e t c / passwd
-mkdir e j e r c i c i o 5
-..................................................
-..................................................
-(a) Inicie 2 sesiones utilizando su nombre de usuario y contraseña. En una sesión vaya
-siguiendo paso a paso las órdenes que se encuentran escritas en el cuadro superior.
-En la otra sesión, cree utilizando algún editor de textos un archivo que se llame
-.ejercicio10_explicacion"dentro del directorio creado en el ejercicio 9.a) y, para cada
-una de las órdenes que ejecute en la otra sesión, realice una breve explicación de los
-resultados obtenidos.
-(b) Complete en el cuadro superior los comandos 19 y 20, de manera tal que realicen la
-siguiente acción:
-19: Copiar el directorio iso y todo su contenido al directorio creado en el inciso
-9.a).
-20: Copiar el resto de los archivos y directorios que se crearon en este ejercicio al
-directorio creado en el ejercicio 9.a).
-(c) Ejecute las órdenes 19 y 20 y comentelas en el archivo creado en el inciso a).
-13. Cree una estructura desde el directorio /home que incluya varios directorios, subdirectorios
-y archivos, según el esquema siguiente. Asuma que “usuario” indica cuál es su nombre de
-usuario. Además deberá tener en cuenta que dirX hace referencia a directorios y fX hace
-referencia a archivos:
-(a) Utilizando la estructura de directorios anteriormente creada, indique que comandos
-son necesarios para realizar las siguientes acciones:
-Mueva el archivo "f3.al directorio de trabajo /home/usuario.
+6. **`chmod 700 /etc/passwd`**  
+   - **Acción:** Intenta cambiar los permisos del archivo `/etc/passwd`, otorgando permisos de lectura, escritura y ejecución (rwx) solo al propietario (root).
+   - **Ejecución fallida:** No. El archivo `/etc/passwd` es propiedad de `root`, por lo que solo el superusuario puede cambiar sus permisos.
 
-Pág. 6
+7. **`passwd root`**  
+   - **Acción:** Intenta cambiar la contraseña del usuario `root`.
+   - **Ejecución fallida:** No. Solo el superusuario o alguien con privilegios elevados puede cambiar la contraseña de `root`.
 
-UNLP |Facultad de Informática
+8. **`rm PRUEBA`**  
+   - **Acción:** Elimina el archivo `PRUEBA`.
+   - **Ejecución exitosa:** Sí, el usuario puede eliminar archivos de los cuales es propietario.
 
-ISO 2024 | Práctica 2
+9. **`man /etc/shadow`**  
+   - **Acción:** Intenta mostrar el archivo `/etc/shadow` en el formato de la página de manual.
+   - **Ejecución fallida:** No. `man` está diseñado para mostrar páginas de manual, no archivos directamente. Además, `/etc/shadow` es un archivo protegido que contiene contraseñas cifradas, por lo que un usuario no root no puede leerlo.
 
-Copie el archivo "f4.en el directorio "dir11".
-Haga los mismo que en el inciso anterior pero el archivo de destino, se debe llamar
-"f7".
-Cree el directorio copia dentro del directorio usuario y copie en él, el contenido de
-"dir1".
-Renombre el archivo "f1"por el nombre archivo y vea los permisos del mismo.
-Cambie los permisos del archivo llamado archivo de manera de reflejar lo siguiente:
+10. **`find / -name "*.conf"`**  
+    - **Acción:** Busca archivos con la extensión `.conf` a partir del directorio raíz `/`.
+    - **Ejecución parcial:** Sí. El comando `find` comenzará la búsqueda, pero fallará en algunos directorios del sistema debido a la falta de permisos del usuario para acceder a ellos.
+
+11. **`usermod root -d /home/newroot -L`**  
+    - **Acción:** Intenta cambiar el directorio de inicio del usuario `root` a `/home/newroot` y bloquear su cuenta.
+    - **Ejecución fallida:** No. Solo el superusuario (root) puede modificar la cuenta de otro usuario, especialmente la cuenta `root`.
+
+12. **`cd /root`**  
+    - **Acción:** Intenta cambiar el directorio de trabajo al directorio `/root`.
+    - **Ejecución fallida:** No. El directorio `/root` es el directorio de inicio del superusuario, y solo el superusuario tiene acceso a este directorio.
+
+13. **`rm *`**  
+    - **Acción:** Elimina todos los archivos en el directorio actual.
+    - **Ejecución exitosa:** Sí, si el usuario tiene permisos sobre los archivos en el directorio actual. Sin embargo, puede ser riesgoso si se ejecuta sin tener en cuenta los archivos que serán eliminados.
+
+14. **`cd /etc`**  
+    - **Acción:** Cambia el directorio de trabajo al directorio `/etc`.
+    - **Ejecución exitosa:** Sí. El directorio `/etc` tiene permisos de lectura para todos los usuarios, por lo que el cambio de directorio es posible.
+
+15. **`cp * /home -R`**  
+    - **Acción:** Copia todos los archivos y directorios del directorio actual (`/etc`) al directorio `/home` de manera recursiva.
+    - **Ejecución fallida:** No. El usuario no tiene permisos para copiar archivos de sistema en el directorio `/etc` ni para escribir en el directorio `/home`.
+
+16. **`shutdown`**  
+    - **Acción:** Intenta apagar o reiniciar el sistema.
+    - **Ejecución fallida:** No. Solo el superusuario (root) puede apagar o reiniciar el sistema.
+
+## 9. Indique qué comando sería necesario ejecutar para realizar cada una de las siguientes acciones:
+### (a) Terminar el proceso con PID 23.
+        kill 23
+### (b) Terminar el proceso llamado init o systemd. ¿Qué resultados obtuvo?
+        killall systemd
+Resultado: El sistema se apagará o reiniciará, ya que init o systemd son procesos esenciales del sistema.
+### (c) Buscar todos los archivos de usuarios en los que su nombre contiene la cadena “.conf”
+        find /home -name "*.conf"
+
+### (d) Guardar una lista de procesos en ejecución el archivo /home/<su nombre de usuario>/procesos
+        
+        ps aux > ~/procesos
+
+### (e) Cambiar los permisos del archivo /home/<su nombre de usuario>/xxxx a:
+- Usuario: Lectura, escritura, ejecución
+- Grupo: Lectura, ejecución
+- Otros: ejecución
+        
+        chmod 751 ~\xxxx 
+
+### (f) Cambiar los permisos del archivo /home/<su nombre de usuario>/yyyy a:
+- Usuario: Lectura, escritura.
+- Grupo: Lectura, ejecución
+- Otros: Ninguno
+        
+        chmod 750 ~/yyyy
+
+### (g) Borrar todos los archivos del directorio /tmp
+        rm -rf /tmp/*
+### (h) Cambiar el propietario del archivo /opt/isodata al usuario iso2010
+        chown iso2010 /opt/isodata
+
+### (i) Guardar en el archivo /home/<su nombre de usuario>/donde el directorio donde me encuentro en este momento, en caso de que el archivo exista no se debe eliminar su contenido anterior.
+
+       pwd >> ~/donde 
+
+## 10. Indique qué comando sería necesario ejecutar para realizar cada una de las siguientes acciones:
+### (a) Ingrese al sistema como usuario “root”
+        su
+### (b) Cree un usuario. Elija como nombre, por convención, la primer letra de su nombre seguida de su apellido. Asígnele una contraseña de acceso.
+        adduser fr
+### (c) ¿Qué archivos fueron modificados luego de crear el usuario y qué directorios se crearon?
+        /etc/passwd 
+        /etc/shadow
+        /etc/group
+        /etc/gshadow
+        /home/fr
+### (d) Crear un directorio en /tmp llamado cursada2017
+        mkdir /tmp/cursada2017
+### (e) Copiar todos los archivos de /var/log al directorio antes creado.
+        cp /var/log/* /tmp/cursada2017
+### (f) Para el directorio antes creado (y los archivos y subdirectorios contenidos en él) cambiar el propietario y grupo al usuario creado y grupo users.
+        chown -R fr:users /tmp/cursada2017
+### (g) Agregue permiso total al dueño, de escritura al grupo y escritura y ejecución a todos los demás usuarios para todos los archivos dentro de un directorio en forma recursiva.
+        chmod 763 /tmp/cursada2017/* 
+### (h) Acceda a otra terminal virtual para loguearse con el usuario antes creado.
+Ctrl + Alt + F2
+login: fr
+
+### (i) Una vez logueado con el usuario antes creado, averigüe cuál es el nombre de su terminal.
+        who 
+### (j) Verifique la cantidad de procesos activos que hay en el sistema.
+        ps -aux | wc -l
+### (k) Verifiqué la cantidad de usuarios conectados al sistema.
+        who | wc -l
+### (l) Vuelva a la terminal del usuario root, y envíele un mensaje al usuario anteriormente creado, avisándole que el sistema va a ser apagado.
+
+        echo "El sistema se apagará pronto" | write fr /dev/pts/2 
+
+### (m) Apague el sistema.
+        sudo shutdown -h now
+
+## 11. Indique qué comando sería necesario ejecutar para realizar cada una de las siguientes acciones:
+### (a) Cree un directorio cuyo nombre sea su número de legajo e ingrese a él.
+        mkdir 222222
+### (b) Cree un archivo utilizando el editor de textos vi, e introduzca su información personal: Nombre, Apellido, Número de alumno y dirección de correo electrónico. El archivo debe llamarse "LEAME".
+        vi LEAME
+### (c) Cambie los permisos del archivo LEAME, de manera que se puedan ver reflejados los siguientes permisos:
+- Dueño: ningún permiso
+- Grupo: permiso de ejecución
+- Otros: todos los permisos
+    
+        chmod 017 LEAME 
+### (d) Vaya al directorio /etc y verifique su contenido. Cree un archivo dentro de su directorio personal cuyo nombre sea leame donde el contenido del mismo sea el listado de todos los archivos y directorios contenidos en /etc. ¿Cuál es la razón por la cuál puede crear este archivo si ya existe un archivo llamado "LEAME.en este directorio?.
+        cd /etc
+        ls -lah << leame
+Se puede porque POSIX es case sensitive
+        
+### (e) ¿Qué comando utilizaría y de qué manera si tuviera que localizar un archivo dentro del filesystem? ¿Y si tuviera que localizar varios archivos con características similares? Explique el concepto teórico y ejemplifique.
+
+        find / -type f -name "*.extension"
+
+Con el parametro type especifico f (file) y con -name el nombre, acepta * para poder agrupar posibles nombres o extensiones
+
+### (f) Utilizando los conceptos aprendidos en el punto e), busque todos los archivos cuya extensión sea .so y almacene el resultado de esta búsqueda en un archivo dentro del directorio creado en a). El archivo deberá llamarse .ejercicio_f".
+        sudo find / -type f -name ".so" >> ~/222222/.ejercicio_f
+
+## 12. Indique qué acción realiza cada uno de los comandos indicados a continuación considerando su orden. Suponga que se ejecutan desde un usuario que no es root ni pertenece al grupo de root. (Asuma que se encuentra posicionado en el directorio de trabajo del usuario con el que se logueó). En caso de no poder ejecutarse el comando indique la razón:
+
+- mkdir iso
+Crea una carpeta llamada iso
+- cd ./iso; ps > f0
+Ingresa al directorio iso y crea un archivo f0 donde se encuntra una isntantanea de los procesos actuales 
+- ls > f1
+se crea otro archivo f1 donde esta el listado de los elemntos del directorio actual 
+- cd /
+cambia el directorio a la raiz
+Sin ser root no se puede.
+- echo $HOME
+imprime la variable de entorno $HOME que es la direccion de home
+- ls -l $> $HOME/iso/ls
+Da error por el $
+- cd $HOME/; mkdir f2
+Ingresa a la carpeta /home o donde este el directorio almacenado en la variable de entorno HOME, crea una carpeta f2
+Sin root no se puede.
+- ls -ld f2
+imprime en pantalla lo que tiene f2
+- chmod 341 f2
+Cambia los permisos al archivo f2. Dando permisos de ejecucion y escritura al owner, perimos de lectura y ejecucion al grupo, y permiso de escritura a los demas.
+- touch dir
+crea un archivo llamado dir
+- cd f2
+cambia directoreio a f2
+- cd ~/iso
+Cambia direcotrio a ~/iso
+- pwd > f3
+guarda el directorio actual en f3
+- ps | grep 'ps' | wc -l >> ../f2/f3
+busca las lineas donde se encuntra el proceso ps, las cuenta y gurda la canitdad
+de lineas en archivo f3, si no existe lo crea que esta dentro del directorio f2  
+- chmod 700 ../f2; cd ..
+cambia los permisos de la carpeta f2, dando RXW al owner.
+cambia directorio a la carpeta que contiene f2
+- find . -name etc/passwd
+busca en el direcotrio en el que esta un directorio /etc/passwd
+- find / -name etc/passwd
+busca a partir de la raiz el direcotrio etc/passwd 
+Se necesita root para acceder a la raiz
+- mkdir ejercicio5
+crea un directorio ejercicio5
+
+
+### (a) Inicie 2 sesiones utilizando su nombre de usuario y contraseña. En una sesión vaya siguiendo paso a paso las órdenes que se encuentran escritas en el cuadro superior. En la otra sesión, cree utilizando algún editor de textos un archivo que se llame .ejercicio10_explicacion"dentro del directorio creado en el ejercicio 9.a) y, para cada una de las órdenes que ejecute en la otra sesión, realice una breve explicación de los resultados obtenidos.
+### (b) Complete en el cuadro superior los comandos 19 y 20, de manera tal que realicen la siguiente acción:
+- 19: Copiar el directorio iso y todo su contenido al directorio creado en el inciso 9.a).
+- 20: Copiar el resto de los archivos y directorios que se crearon en este ejercicio al directorio creado en el ejercicio 9.a).
+### (c) Ejecute las órdenes 19 y 20 y comentelas en el archivo creado en el inciso a).
+## 13. Cree una estructura desde el directorio /home que incluya varios directorios, subdirectorios y archivos, según el esquema siguiente. Asuma que “usuario” indica cuál es su nombre de usuario. Además deberá tener en cuenta que dirX hace referencia a directorios y fX hace referencia a archivos:
+### (a) Utilizando la estructura de directorios anteriormente creada, indique que comandos son necesarios para realizar las siguientes acciones:
+- Mueva el archivo "f3.al directorio de trabajo /home/usuario.
+
+- Copie el archivo "f4.en el directorio "dir11".
+- Haga los mismo que en el inciso anterior pero el archivo de destino, se debe llamar "f7".
+- Cree el directorio copia dentro del directorio usuario y copie en él, el contenido de "dir1".
+- Renombre el archivo "f1"por el nombre archivo y vea los permisos del mismo.
+- Cambie los permisos del archivo llamado archivo de manera de reflejar lo siguiente:
 • Usuario: Permisos de lectura y escritura
 • Grupo: Permisos de ejecución
 • Otros: Todos los permisos
-Renombre los archivos "f3 "f4"de manera que se llamen "f3.exe "f4.exerespectivamente.
-2
+- Renombre los archivos "f3 "f4"de manera que se llamen "f3.exe "f4.exerespectivamente.
 
-2
-
-Utilizando un único comando cambie los permisos de los dos archivos renombrados en
-el inciso anterior, de manera de reflejar lo siguiente:
+- Utilizando un único comando cambie los permisos de los dos archivos renombrados en el inciso anterior, de manera de reflejar lo siguiente:
 • Usuario: Ningún permiso
 • Grupo: Permisos de escritura
 • Otros: Permisos de escritura y ejecución
-14. Indique qué comando/s es necesario para realizar cada una de las acciones de la siguiente
-secuencia de pasos (considerando su orden de aparición):
-(a) Cree un directorio llamado logs en el directorio /tmp.
-(b) Copie todo el contenido del directorio /var/log en el directorio creado en el punto
-anterior.
-(c) Empaquete el directorio creado en 1, el archivo resultante se debe llamar "misLogs.tar".
-(d) Empaquete y comprima el directorio creado en 1, el archivo resultante se debe llamar
-"misLogs.tar.gz".
-(e) Copie los archivos creados en 3 y 4 al directorio de trabajo de su usuario.
-(f) Elimine el directorio creado en 1, logs.
-(g) Desempaquete los archivos creados en 3 y 4 en 2 directorios diferentes.
 
-Pág. 7
-
-
+## 14. Indique qué comando/s es necesario para realizar cada una de las acciones de la siguiente secuencia de pasos (considerando su orden de aparición):
+### (a) Cree un directorio llamado logs en el directorio /tmp.
+### (b) Copie todo el contenido del directorio /var/log en el directorio creado en el punto anterior.
+### (c) Empaquete el directorio creado en 1, el archivo resultante se debe llamar "misLogs.tar".
+### (d) Empaquete y comprima el directorio creado en 1, el archivo resultante se debe llamar "misLogs.tar.gz".
+### (e) Copie los archivos creados en 3 y 4 al directorio de trabajo de su usuario.
+### (f) Elimine el directorio creado en 1, logs.
+### (g) Desempaquete los archivos creados en 3 y 4 en 2 directorios diferentes.
