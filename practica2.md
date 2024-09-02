@@ -772,80 +772,112 @@ Con el parametro type especifico f (file) y con -name el nombre, acepta * para p
 ### (f) Utilizando los conceptos aprendidos en el punto e), busque todos los archivos cuya extensión sea .so y almacene el resultado de esta búsqueda en un archivo dentro del directorio creado en a). El archivo deberá llamarse .ejercicio_f".
         sudo find / -type f -name ".so" >> ~/222222/.ejercicio_f
 
-## 12. Indique qué acción realiza cada uno de los comandos indicados a continuación considerando su orden. Suponga que se ejecutan desde un usuario que no es root ni pertenece al grupo de root. (Asuma que se encuentra posicionado en el directorio de trabajo del usuario con el que se logueó). En caso de no poder ejecutarse el comando indique la razón:
+## 12. Indique qué acción realiza cada uno de los comandos indicados a continuación considerando su orden. Suponga que se ejecutan desde un usuario que no es root ni pertenece al grupo de root. (Asuma que se encuentra posicionado en el directorio de trabajo del usuario con el que se logueó). En caso de no poder ejecutarse el comando, indique la razón.
 
-- mkdir iso
-Crea una carpeta llamada iso
-- cd ./iso; ps > f0
-Ingresa al directorio iso y crea un archivo f0 donde se encuntra una isntantanea de los procesos actuales 
-- ls > f1
-se crea otro archivo f1 donde esta el listado de los elemntos del directorio actual 
-- cd /
-cambia el directorio a la raiz
-Sin ser root no se puede.
-- echo $HOME
-imprime la variable de entorno $HOME que es la direccion de home
-- ls -l $> $HOME/iso/ls
-Da error por el $
-- cd $HOME/; mkdir f2
-Ingresa a la carpeta /home o donde este el directorio almacenado en la variable de entorno HOME, crea una carpeta f2
-Sin root no se puede.
-- ls -ld f2
-imprime en pantalla lo que tiene f2
-- chmod 341 f2
-Cambia los permisos al archivo f2. Dando permisos de ejecucion y escritura al owner, perimos de lectura y ejecucion al grupo, y permiso de escritura a los demas.
-- touch dir
-crea un archivo llamado dir
-- cd f2
-cambia directoreio a f2
-- cd ~/iso
-Cambia direcotrio a ~/iso
-- pwd > f3
-guarda el directorio actual en f3
-- ps | grep 'ps' | wc -l >> ../f2/f3
-busca las lineas donde se encuntra el proceso ps, las cuenta y gurda la canitdad
-de lineas en archivo f3, si no existe lo crea que esta dentro del directorio f2  
-- chmod 700 ../f2; cd ..
-cambia los permisos de la carpeta f2, dando RXW al owner.
-cambia directorio a la carpeta que contiene f2
-- find . -name etc/passwd
-busca en el direcotrio en el que esta un directorio /etc/passwd
-- find / -name etc/passwd
-busca a partir de la raiz el direcotrio etc/passwd 
-Se necesita root para acceder a la raiz
-- mkdir ejercicio5
-crea un directorio ejercicio5
+1. **`mkdir iso`**
+   - Crea un directorio llamado `iso` en el directorio actual.
 
+2. **`cd ./iso; ps > f0`**
+   - Ingresa al directorio `iso` y redirige la salida del comando `ps` (que lista los procesos en ejecución) al archivo `f0`.
 
-### (a) Inicie 2 sesiones utilizando su nombre de usuario y contraseña. En una sesión vaya siguiendo paso a paso las órdenes que se encuentran escritas en el cuadro superior. En la otra sesión, cree utilizando algún editor de textos un archivo que se llame .ejercicio10_explicacion"dentro del directorio creado en el ejercicio 9.a) y, para cada una de las órdenes que ejecute en la otra sesión, realice una breve explicación de los resultados obtenidos.
+3. **`ls > f1`**
+   - Redirige la salida del comando `ls` (que lista el contenido del directorio actual) al archivo `f1`.
+
+4. **`cd /`**
+   - Cambia el directorio actual al directorio raíz `/`. **Este comando no requiere permisos de root, por lo que puede ejecutarse.**
+
+5. **`echo $HOME`**
+   - Imprime en pantalla el valor de la variable de entorno `$HOME`, que contiene la ruta del directorio de inicio del usuario.
+
+6. **`ls -l $> $HOME/iso/ls`**
+   - **Este comando es incorrecto.** La sintaxis `$>` no es válida. Debería ser algo como `ls -l > $HOME/iso/ls` para redirigir la salida.
+
+7. **`cd $HOME/; mkdir f2`**
+   - Cambia al directorio almacenado en la variable de entorno `$HOME` (generalmente el directorio de inicio del usuario) y crea un directorio llamado `f2`. **No se necesita ser root para ejecutarlo.**
+
+8. **`ls -ld f2`**
+   - Lista los detalles del directorio `f2` (permisos, propietario, etc.) en formato largo.
+
+9. **`chmod 341 f2`**
+   - Cambia los permisos del directorio `f2` a `341`, lo que otorga permisos de ejecución y escritura al propietario, permisos de lectura y ejecución al grupo, y permisos de escritura a los demás usuarios.
+
+10. **`touch dir`**
+    - Crea un archivo vacío llamado `dir` en el directorio actual.
+
+11. **`cd f2`**
+    - Cambia al directorio `f2`.
+
+12. **`cd ~/iso`**
+    - Cambia al directorio `iso` ubicado en el directorio de inicio del usuario (indicado por `~`).
+
+13. **`pwd > f3`**
+    - Guarda la salida del comando `pwd` (que imprime el directorio actual) en un archivo llamado `f3`.
+
+14. **`ps | grep 'ps' | wc -l >> ../f2/f3`**
+    - Busca el proceso `ps` utilizando `grep`, cuenta el número de líneas encontradas con `wc -l`, y redirige la salida al archivo `f3` ubicado en el directorio `f2`. Si el archivo `f3` no existe, lo crea.
+
+15. **`chmod 700 ../f2; cd ..`**
+    - Cambia los permisos del directorio `f2` para que solo el propietario tenga permisos de lectura, escritura y ejecución. Luego, cambia al directorio padre del actual.
+
+16. **`find . -name etc/passwd`**
+    - Busca en el directorio actual y sus subdirectorios un archivo o directorio llamado `etc/passwd`. **Este comando probablemente no encontrará nada, ya que `/etc/passwd` normalmente está en la raíz.**
+
+17. **`find / -name etc/passwd`**
+    - Busca a partir del directorio raíz un archivo o directorio llamado `etc/passwd`. **Este comando requiere permisos de root para acceder a todos los directorios del sistema.**
+
+18. **`mkdir ejercicio5`**
+    - Crea un directorio llamado `ejercicio5` en el directorio actual.
+
+### (a) Inicie 2 sesiones utilizando su nombre de usuario y contraseña. En una sesión vaya siguiendo paso a paso las órdenes que se encuentran escritas en el cuadro superior. En la otra sesión, cree utilizando algún editor de textos un archivo que se llame .ejercicio10_explicacion dentro del directorio creado en el ejercicio 9.a) y, para cada una de las órdenes que ejecute en la otra sesión, realice una breve explicación de los resultados obtenidos. (?)
+
 ### (b) Complete en el cuadro superior los comandos 19 y 20, de manera tal que realicen la siguiente acción:
 - 19: Copiar el directorio iso y todo su contenido al directorio creado en el inciso 9.a).
+    **'cp -r ~/iso <directorio>'**
 - 20: Copiar el resto de los archivos y directorios que se crearon en este ejercicio al directorio creado en el ejercicio 9.a).
-### (c) Ejecute las órdenes 19 y 20 y comentelas en el archivo creado en el inciso a).
+    **'cp -r ~/ejercicio5 <directorio>'**
+### (c) Ejecute las órdenes 19 y 20 y comentelas en el archivo creado en el inciso a). 
+    (?)
 ## 13. Cree una estructura desde el directorio /home que incluya varios directorios, subdirectorios y archivos, según el esquema siguiente. Asuma que “usuario” indica cuál es su nombre de usuario. Además deberá tener en cuenta que dirX hace referencia a directorios y fX hace referencia a archivos:
+
 ### (a) Utilizando la estructura de directorios anteriormente creada, indique que comandos son necesarios para realizar las siguientes acciones:
 - Mueva el archivo "f3.al directorio de trabajo /home/usuario.
-
+ mv dir1/f3 .
 - Copie el archivo "f4.en el directorio "dir11".
+        cp dir2/f4 dir1/dir11
 - Haga los mismo que en el inciso anterior pero el archivo de destino, se debe llamar "f7".
+        cp dir2/f4 dir1/dir11/f7
 - Cree el directorio copia dentro del directorio usuario y copie en él, el contenido de "dir1".
-- Renombre el archivo "f1"por el nombre archivo y vea los permisos del mismo.
+        mkdir copia
+        cp -r dir1/* copia
+- Renombre el archivo "f1" por el nombre archivo y vea los permisos del mismo.
+        mv f1 archivo
+        ls -la | grep archivo
 - Cambie los permisos del archivo llamado archivo de manera de reflejar lo siguiente:
 • Usuario: Permisos de lectura y escritura
 • Grupo: Permisos de ejecución
 • Otros: Todos los permisos
+        chmod 617
 - Renombre los archivos "f3 "f4"de manera que se llamen "f3.exe "f4.exerespectivamente.
-
+    mv f3 f3.exe
+    mv dir2/f4 dir2/f4.exe
 - Utilizando un único comando cambie los permisos de los dos archivos renombrados en el inciso anterior, de manera de reflejar lo siguiente:
 • Usuario: Ningún permiso
 • Grupo: Permisos de escritura
 • Otros: Permisos de escritura y ejecución
-
+    chmod 045 f3.exe dir2/f4.exe
 ## 14. Indique qué comando/s es necesario para realizar cada una de las acciones de la siguiente secuencia de pasos (considerando su orden de aparición):
 ### (a) Cree un directorio llamado logs en el directorio /tmp.
+**'mkdir /tmp/logs'**
 ### (b) Copie todo el contenido del directorio /var/log en el directorio creado en el punto anterior.
+**'cp /var/log/* /tmp/logs'**
 ### (c) Empaquete el directorio creado en 1, el archivo resultante se debe llamar "misLogs.tar".
+**'tar -fc misLogs.tar tmp/logs **
 ### (d) Empaquete y comprima el directorio creado en 1, el archivo resultante se debe llamar "misLogs.tar.gz".
+**'tar -fcz misLogs.tar.gz tmp/logs **
 ### (e) Copie los archivos creados en 3 y 4 al directorio de trabajo de su usuario.
+**'cp misLogs.tar.gz misLogs.tar ~/'**
 ### (f) Elimine el directorio creado en 1, logs.
+**'rm -rf /tmp/logs'**
 ### (g) Desempaquete los archivos creados en 3 y 4 en 2 directorios diferentes.
+**'tar -xf misLogs.tar -C misLogsTar'**
+**'tar -xfz misLogs.tar.gz -C misLogsTargz'**
