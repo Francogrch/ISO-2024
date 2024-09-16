@@ -417,10 +417,98 @@ Obtendré como resultado: /tmp/aEJ /tmp/bEJ
 Y si ejecuto: ./renombra /tmp/ -b EJ
 El resultado será: /tmp/EJa /tmp/EJb
 
+
+```bash
+#!/bin/bash
+if [ $# != 3 ]; then
+  exit 0
+fi
+
+if [ $2 == "-a" ]; then
+  for archivo in "$1"/*; do
+    mv $archivo "$archivo$3"
+  done
+fi
+if [ $2 == "-b" ]; then
+  for archivo in "$1"/*; do
+    mv $archivo "$1/$3$(basename "$archivo")"
+  done
+fi
+```
+
 ## 15. Comando cut. El comando cut nos permite procesar la líneas de la entrada que reciba (archivo, entrada estándar, resultado de otro comando, etc) y cortar columnas o campos, siendo posible indicar cual es el delimitador de las mismas. Investigue los parámetros que puede recibir este comando y cite ejemplos de uso.
+
+El comando `cut` en Linux se utiliza para extraer secciones de líneas de archivos o de la entrada estándar. Puedes especificar columnas, rangos de caracteres o campos delimitados por algún carácter.
+
+### Parámetros comunes de `cut`:
+
+- **`-f`**: Selecciona uno o más campos específicos.
+- **`-d`**: Especifica el delimitador de campos (por defecto, el delimitador es el tabulador).
+- **`-b`**: Corta un rango de bytes específicos.
+- **`-c`**: Corta un rango de caracteres específicos.
+
+### Ejemplos de uso:
+
+1. **Cortar un campo específico en un archivo delimitado por comas (`-f` y `-d`)**:
+
+   Si tienes un archivo llamado `datos.csv`:
+   ```bash
+   nombre,apellido,edad
+   Juan,Perez,30
+   Ana,Gomez,25
+   ```
+
+   Para extraer solo el segundo campo (apellido):
+   ```bash
+   cut -d ',' -f 2 datos.csv
+   ```
+
+2. **Cortar por caracteres específicos (`-c`)**:
+
+   Si tienes un archivo `nombres.txt`:
+   ```bash
+   Juan Perez
+   Ana Gomez
+   ```
+
+   Para extraer los primeros cuatro caracteres de cada línea:
+   ```bash
+   cut -c 1-4 nombres.txt
+   ```
+
+3. **Cortar por bytes (`-b`)**:
+
+   Si tienes un archivo con contenido en una sola línea:
+   ```bash
+   echo "abcdef" > archivo.txt
+   ```
+
+   Para extraer los bytes 1 a 3:
+   ```bash
+   cut -b 1-3 archivo.txt
+   ```
+
+4. **Uso combinado con otros comandos**:
+
+   Extraer el usuario de la lista de procesos:
+   ```bash
+   ps aux | cut -d ' ' -f 1
+   ```
+
+El comando `cut` es muy útil cuando necesitas trabajar con archivos estructurados y procesar solo partes específicas del contenido.
 
 ## 16. Realizar un script que reciba como parámetro una extensión y haga un reporte con 2 columnas, el nombre de usuario y la cantidad de archivos que posee con esa extensión. Se debe guardar el resultado en un archivo llamado reporte.txt
 
+```bash
+#!/bin/bash
+
+if [ $# != 1 ]; then
+  exit 0
+fi
+
+cant=$(ls | grep "$1" | wc -l)
+echo "$(whoami):$cant" >>reporte.txt
+```
 ## 17. Escribir un script que al ejecutarse imprima en pantalla los nombre de los archivos que se encuentran en el directorio actual, intercambiando minúsculas por mayúsculas, además de eliminar la letra a (mayúscula o minúscula). Ejemplo, directorio actual:
 
 IsO
@@ -435,8 +523,80 @@ PEPe
 mRI
 
 *Ayuda*: Investigar el comando tr
+### Comando `tr`
+
+El comando `tr` en Linux es utilizado para **traducir, eliminar o comprimir** caracteres de la entrada estándar. Su funcionamiento se basa en convertir una secuencia de caracteres en otra secuencia según lo que se le indique. Es comúnmente usado en combinación con otros comandos a través de pipes (`|`), para modificar la salida de esos comandos.
+#### Principales parámetros y opciones
+
+1. **Sustitución de caracteres**:
+   El uso más común de `tr` es reemplazar un conjunto de caracteres por otro. Para ello, se definen dos conjuntos de caracteres: el primero indica los caracteres a buscar y el segundo los caracteres por los que se reemplazarán.
+   
+   ```bash
+   tr 'a' 'A'
+   ```
+
+   Este comando reemplaza todas las letras minúsculas "a" por mayúsculas "A" en la entrada estándar.
+
+2. **`-d` (delete)**: Elimina caracteres de la entrada. El conjunto de caracteres especificados se borrará de la entrada.
+   
+   ```bash
+   tr -d 'a'
+   ```
+
+   Elimina todas las letras "a" de la entrada.
+
+3. **`-s` (squeeze-repeats)**: Comprime repeticiones de caracteres. Si se repite un carácter en secuencia, se reduce a una sola ocurrencia.
+
+   ```bash
+   tr -s ' '
+   ```
+
+   Comprime múltiples espacios consecutivos en uno solo.
+
+4. **`-c` (complement)**: Opera sobre el complemento del conjunto de caracteres especificado, es decir, sobre todos los caracteres que **no** están en el conjunto dado.
+
+   ```bash
+   tr -c 'a-zA-Z' ' '
+   ```
+
+   Esto reemplaza cualquier carácter que no sea una letra (mayúscula o minúscula) con un espacio.
+
+```bash
+#!/bin/bash
+
+for archivo in $(ls); do
+  echo "$archivo" | tr "a-zA-Z" "A-Za-z" | tr -d 'aA'
+done
+```
 
 ## 18. Crear un script que verifique cada 10 segundos si un usuario se ha loqueado en el sistema (el nombre del usuario será pasado por parámetro). Cuando el usuario finalmente se loguee, el programa deberá mostrar el mensaje ”Usuario XXX logueado en el sistema” y salir.
+
+```bash
+#!/bin/bash
+
+if [ $# -ne 1 ]; then
+  exit 1
+fi
+
+function isOn() {
+  for user in $(who | awk '{print $1}' | uniq); do
+    if [ $1 = $user ]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+log=0
+while [ $log -eq 0 ]; do
+  if isOn $1; then
+    log=1
+  else
+    sleep 10
+  fi
+done
+```
+
 
 ## 19. Escribir un Programa de “Menu de Comandos Amigable con el Usuario” llamado menu, el cual, al ser invocado, mostrará un menú con la selección para cada uno de los scripts creados en esta práctica. Las instrucciones de como proceder deben mostrarse junto con el menú. El menú deberá iniciarse y permanecer activo hasta que se seleccione Salir. Por ejemplo:
 MENU DE COMANDOS
@@ -446,13 +606,74 @@ MENU DE COMANDOS
 ...
 Ingrese la opción a ejecutar: 03
 
+```bash
+#!/bin/bash
+
+select option in "12a" "12b" "12c" "13a" "Salir"; do
+  case $option in
+  "12a")
+    source ./12-a.sh
+    ;;
+  "12b")
+    echo "Primer numero: "
+    read p1
+    echo "Segundo numero: "
+    read p2
+    source ./12-b.sh $p1 $p2
+    ;;
+  "12c")
+    echo "Operacion: "
+    read p1
+    echo "Primer numero: "
+    read p2
+    echo "Segundo numero: "
+    read p3
+    source ./12-c-calculadora.sh $p1 $p2 $p3
+    ;;
+  "13a")
+    source ./13-a.sh
+    ;;
+  "Salir")
+    exit 0
+    ;;
+  esac
+done
+```
+
 ## 20. Realice un script que simule el comportamiento de una estructura de PILA e implemente las siguientes funciones aplicables sobre una estructura global definida en el script:
 
 - push: Recibe un parámetro y lo agrega en la pila
 - length: Devuelve la longitud de la pila
 - pop: Saca un elemento de la pila
 - print: Imprime todos elementos de la pila
-
+```bash
+#!/bin/bash
+list=()
+select option in "push" "lenght" "pop" "print" "salir"; do
+  case $option in
+  "push")
+    read n1
+    list+=("$n1")
+    ;;
+  "lenght")
+    echo ${#list[@]}
+    ;;
+  "pop")
+    valor=$(expr ${#list[@]} - 1)
+    if [ $valor -gt -1 ]; then
+      echo "${list[$valor]}"
+      unset 'list[$valor]'
+    fi
+    ;;
+  "print")
+    echo ${list[@]}
+    ;;
+  "salir")
+    exit 0
+    ;;
+  esac
+done
+```
 ## 21. Dentro del mismo script y utilizando las funciones implementadas:
 - Agregue 10 elementos a la pila
 - Saque 3 de ellos
@@ -460,6 +681,7 @@ Ingrese la opción a ejecutar: 03
 - Luego imprima la totalidad de los elementos que en ella se encuentran.
 
 ## 22. Dada la siguiente declaración al comienzo de un script: num=(10 3 5 7 9 3 5 4) (la cantidad de elementos del arreglo puede variar). Implemente la función productoria dentro de este script, cuya tarea sea multiplicar todos los números del arreglo
+
 
 ## 23. Implemente un script que recorra un arreglo compuesto por números e imprima en pantalla sólo los números pares y que cuente sólo los números impares y los informe en pantalla al finalizar el recorrido.
 

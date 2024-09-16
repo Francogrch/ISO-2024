@@ -3,7 +3,7 @@ echo "Ingrese el primer numero:"
 read num1
 echo "Ingrese el segundo numero:"
 read num2
-if [$num1 -gt $num2]; then
+if [ $num1 -gt $num2 ]; then
   mayor=$num1
 else
   mayor=$num2
