@@ -270,91 +270,94 @@ function nombre_funcion {
 ### (a) Realizar un script que le solicite al usuario 2 números, los lea de la entrada Standard e imprima la multiplicación, suma, resta y cual es el mayor de los números leídos.
 ```bash
 #!/bin/bash
-echo "Ingrese el primer numero:"
-read num1
-echo "Ingrese el segundo numero:"
-read num2
-if [$num1 -gt $num2]; then
+
+if [ $# != 2 ]; then
+  exit 0
+fi
+
+num1=$1
+num2=$2
+
+if [ $num1 -gt $num2 ]; then
   mayor=$num1
 else
   mayor=$num2
 fi
 
 echo "Multiplicacion: $num1 * $num2 = $(expr $num1 \* $num2)"
-echo "Suma: $num1 + $num2 = $(expr $num1 \+ $num2)"
-echo "Resta: $num1 - $num2 = $(expr $num1 \- $num2)"
+echo "Suma: $num1 + $num2 = $(expr $num1 + $num2)"
+echo "Resta: $num1 - $num2 = $(expr $num1 - $num2)"
 echo "Mayor entre $num1 y $num2 = $mayor "
+
 ```
 ### (b) Modificar el script creado en el inciso anterior para que los números sean recibidos como parámetros. El script debe controlar que los dos parámetros sean enviados.
 ```bash
 #!/bin/bash
+
+if [ $# != 2 ]; then
+  exit 0
+fi
+
 num1=$1
 num2=$2
 
-if [ $# -gt 1 ]; then
-  if [ $num1 -gt $num2 ]; then
-    mayor=$num1
-  else
-    mayor=$num2
-  fi
-
-  echo "Multiplicacion: $num1 * $num2 = $(expr $num1 \* $num2)"
-  echo "Suma: $num1 + $num2 = $(expr $num1 \+ $num2)"
-  echo "Resta: $num1 - $num2 = $(expr $num1 \- $num2)"
-  echo "Mayor entre $num1 y $num2 = $mayor "
+if [ $num1 -gt $num2 ]; then
+  mayor=$num1
 else
-  echo "No hay mas de un parametro."
+  mayor=$num2
 fi
+
+echo "Multiplicacion: $num1 * $num2 = $(expr $num1 \* $num2)"
+echo "Suma: $num1 + $num2 = $(expr $num1 + $num2)"
+echo "Resta: $num1 - $num2 = $(expr $num1 - $num2)"
+echo "Mayor entre $num1 y $num2 = $mayor "
 ```
 
 ### (c) Realizar una calculadora que ejecute las 4 operaciones básicas: +, - ,*, %. Esta calculadora debe funcionar recibiendo la operación y los números como parámetros
 ```bash
 #!/bin/bash
 
+if [ $# != 3 ]; then
+  exit 0
+fi
+
 function suma {
-  echo "$1 + $2 = $(expr $1 + $2)"
+  echo "$(expr $1 + $2)"
 }
 function resta {
-  echo "$1 - $2 = $(expr $1 - $2)"
+  echo "$(expr $1 - $2)"
 }
 function multi {
-  echo "$1 * $2 =  $(expr $1 \* $2)"
+  echo "$(expr $1 \* $2)"
 }
 function div {
-  echo "$1 % $2 = $(expr $1 % $2)"
+  echo "$(expr $1 % $2)"
 }
 
-if [ $# -gt 2 ]; then
-  case $1 in
-  "multiplicacion")
-    multi $2 $3
-    ;;
-  "suma")
-    suma $2 $3
-    ;;
-  "resta")
-    resta $2 $3
-    ;;
-  "division")
-    div $2 $3
-    ;;
-  esac
-else
-  echo "Recuerda que los parametros tienen este formato -> OPCION num1 num2 "
-  echo "Opciones: suma resta multiplicacion division "
-fi
+case $1 in
+"multiplicacion")
+  multi $2 $3
+  ;;
+"suma")
+  suma $2 $3
+  ;;
+"resta")
+  resta $2 $3
+  ;;
+"division")
+  div $2 $3
+  ;;
+esac
+
 ```
 ## 13. Uso de las estructuras de control:
 ### (a) Realizar un script que visualice por pantalla los números del 1 al 100 así como sus cuadrados.
 ```bash
-#!/bin/bash
 
+#!/bin/bash
 for ((i = 1; i <= 100; i++)); do
   echo $i
-done
-
-for ((i = 0; i <= 100; i++)); do
-  echo "$i^2 = $(expr $i \* $i) "
+  echo "$(expr $i \* $i)"
 done
 ```
 ### (b) Crear un script que muestre 3 opciones al usuario: Listar, DondeEstoy y QuienEsta. Según la opción elegida se le debe mostrar:
@@ -382,10 +385,26 @@ select opcion in "Listar" "DondeEstoy" "QuienEsta" "Salir"; do
   esac
 done
 ```
-### (c) Crear un script que reciba como parámetro el nombre de un archivo e informe si el mismo existe o no, y en caso afirmativo indique si es un directorio o un archivo. En caso de que no exista el archivo/directorio cree un directorio con el nombre recibido como parámetro.
+### (c) Crear un script que reciba como parámetro el nombre de un archivo e informe si el mismo existe o no, y en caso afirmativo indique si es un directorio o un archivo. En caso de que no exista el archivo/directorio cree un directorio con el nombre recibido como parámetro. 
+```bash
+#!/bin/bash
+if [ $# != 1 ]; then
+  exit 0
+fi
 
+if [ -f $1 ]; then
+  if [ -d $1 ]; then
+    echo "Directorio"
+  else
+    echo "Archivo"
+  fi
+else
+  touch $1
+fi
+```
 
 ## 14. Renombrando Archivos: haga un script que renombre solo archivos de un directorio pasado como parametro agregandole una CADENA, contemplando las opciones:
+
 - “-a CADENA”: renombra el fichero concatenando CADENA al final del nombre del
 archivo
 - “-b CADENA”: renombra el fichero concantenado CADENA al principio del nombre
