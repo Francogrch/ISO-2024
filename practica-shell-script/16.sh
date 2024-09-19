@@ -1,8 +1,11 @@
 #!/bin/bash
 
 if [ $# != 1 ]; then
-  exit 0
+  exit 1
 fi
 
-cant=$(ls | grep "$1" | wc -l)
-echo "$(whoami):$cant" >>reporte.txt
+names=$(cut -f 1 -d: /etc/passwd)
+
+for name in $names; do
+  echo "$name:$(find / -name "*.$1" -user $name | wc -l)" >>reporte.txt
+done

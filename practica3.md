@@ -503,11 +503,14 @@ El comando `cut` es muy útil cuando necesitas trabajar con archivos estructurad
 #!/bin/bash
 
 if [ $# != 1 ]; then
-  exit 0
+  exit 1
 fi
 
-cant=$(ls | grep "$1" | wc -l)
-echo "$(whoami):$cant" >>reporte.txt
+names=$(cut -f 1 -d: /etc/passwd)
+
+for name in $names; do
+  echo "$name:$(find / -name "*.$1" -user $name | wc -l)" >>reporte.txt
+done
 ```
 ## 17. Escribir un script que al ejecutarse imprima en pantalla los nombre de los archivos que se encuentran en el directorio actual, intercambiando minúsculas por mayúsculas, además de eliminar la letra a (mayúscula o minúscula). Ejemplo, directorio actual:
 
@@ -567,6 +570,12 @@ El comando `tr` en Linux es utilizado para **traducir, eliminar o comprimir** ca
 for archivo in $(ls); do
   echo "$archivo" | tr "a-zA-Z" "A-Za-z" | tr -d 'aA'
 done
+
+```
+Segunda opcion:
+```bash
+echo $(ls | tr "a-zA-Z" "A-Za-z" | tr -d 'aA')
+
 ```
 
 ## 18. Crear un script que verifique cada 10 segundos si un usuario se ha loqueado en el sistema (el nombre del usuario será pasado por parámetro). Cuando el usuario finalmente se loguee, el programa deberá mostrar el mensaje ”Usuario XXX logueado en el sistema” y salir.
@@ -595,8 +604,25 @@ while [ $log -eq 0 ]; do
     sleep 10
   fi
 done
-```
 
+isOn=${who | tr -s " " | cut -f 1 -d " " | grep "soshi"}
+if [ ${isOn[@]} -eq 0]{
+  sleep 10
+  isOn=${who | tr -s " " | cut -f 1 -d " " | grep "soshi"}
+}
+```
+Segunda resolucion:
+```bash
+#!/bin/bash
+if [ $# -ne 1 ]; then
+  exit 1
+fi
+isOn=$(who | tr -s " " | cut -f 1 -d " " | grep $1)
+while [ ${#isOn[@]} -eq 0 ]; do
+  sleep 10
+  isOn=$(who | tr -s " " | cut -f 1 -d " " | grep $1)
+done
+```
 
 ## 19. Escribir un Programa de “Menu de Comandos Amigable con el Usuario” llamado menu, el cual, al ser invocado, mostrará un menú con la selección para cada uno de los scripts creados en esta práctica. Las instrucciones de como proceder deben mostrarse junto con el menú. El menú deberá iniciarse y permanecer activo hasta que se seleccione Salir. Por ejemplo:
 MENU DE COMANDOS
@@ -648,6 +674,7 @@ done
 - print: Imprime todos elementos de la pila
 ```bash
 #!/bin/bash
+
 list=()
 select option in "push" "lenght" "pop" "print" "salir"; do
   case $option in
@@ -681,9 +708,40 @@ done
 - Luego imprima la totalidad de los elementos que en ella se encuentran.
 
 ## 22. Dada la siguiente declaración al comienzo de un script: num=(10 3 5 7 9 3 5 4) (la cantidad de elementos del arreglo puede variar). Implemente la función productoria dentro de este script, cuya tarea sea multiplicar todos los números del arreglo
+```bash
 
+#!/bin/bash
 
+num=(10 3 5 7 9 3 5 4)
+
+function productorio {
+  sum=1
+  for num in $@; do
+    sum=$(($sum * $num))
+  done
+  echo $sum
+}
+
+productorio ${num[@]}
+
+```
 ## 23. Implemente un script que recorra un arreglo compuesto por números e imprima en pantalla sólo los números pares y que cuente sólo los números impares y los informe en pantalla al finalizar el recorrido.
+
+```bash
+#!/bin/bash
+
+array=(1 2 3 4 5 6 7 8)
+impares=0
+
+for num in ${array[@]}; do
+  if [ $((num % 2)) -ne 0 ]; then
+    impares=$(($impares + 1))
+  else
+    echo $num
+  fi
+done
+echo impares: $impares
+```
 
 ## 24. Dada la definición de 2 vectores del mismo tamaño y cuyas longitudes no se conocen.
 
@@ -704,12 +762,59 @@ La suma de los elementos de la posición 1 de los vectores es 178
 ...
 La suma de los elementos de la posición 4 de los vectores es 10
 
+```bash
+
+#!/bin/bash
+
+vector1=(1 80 65 35 2)
+vector2=(5 98 3 41 8)
+
+for ((i = 0; i < ${#vector1[@]}; i++)); do
+  echo La suma de los elementos de la posicion $i de los vectores es $((vector1[i] + vector2[i]))
+done
+```
+
 ## 25. Realice un script que agregue en un arreglo todos los nombres de los usuarios del sistema pertenecientes al grupo “users”. Adicionalmente el script puede recibir como parametro:
 - “-b n”: Retorna el elemento de la posición n del arreglo si el mismo existe. Caso contrario, un mensaje de error.
 - “-l”: Devuelve la longitud del arreglo
 - “-i”: Imprime todos los elementos del arreglo en pantalla
 
+```bash
+#!/bin/bash
+
+# usuarios=$(grep "^users:" /etc/group | cut -d: -f4)
+users=$(grep "wheel:" /etc/group | cut -d: -f4)
+
+users="user1,user2,user3"
+
+IFS=","
+read -r -a usuarios <<<"$users"
+
+while getopts "b:il" opt; do
+  case $opt in
+  b)
+    if [ "$OPTARG" -lt "${#usuarios[@]}" ]; then
+      echo ${usuarios[$OPTARG]}
+    else
+      echo "Fuera de rango"
+    fi
+    ;;
+  l)
+    echo ${#usuarios[@]}
+    ;;
+  i)
+    echo ${usuarios[@]}
+    ;;
+  *)
+    echo Comando invalido
+    ;;
+  esac
+done
+```
+
 ## 26. Escriba un script que reciba una cantidad desconocida de parámetros al momento de su invocación (debe validar que al menos se reciba uno). Cada parámetro representa la ruta absoluta de un archivo o directorio en el sistema. El script deberá iterar por todos los parámetros recibidos, y solo para aquellos parámetros que se encuentren en posiciones impares (el primero, el tercero, verificar si el archivo o directorio existen en el sistema, imprimiendo en pantalla que tipo de objeto es (archivo o directorio). Además, deberá informar la cantidad de archivos o directorios inexistentes en el sistema.
+
+
 
 ## 27. Realice un script que implemente a través de la utilización de funciones las operaciones básicas sobre arreglos:
 - inicializar: Crea un arreglo llamado array vacío
