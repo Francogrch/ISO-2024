@@ -814,7 +814,32 @@ done
 
 ## 26. Escriba un script que reciba una cantidad desconocida de parámetros al momento de su invocación (debe validar que al menos se reciba uno). Cada parámetro representa la ruta absoluta de un archivo o directorio en el sistema. El script deberá iterar por todos los parámetros recibidos, y solo para aquellos parámetros que se encuentren en posiciones impares (el primero, el tercero, verificar si el archivo o directorio existen en el sistema, imprimiendo en pantalla que tipo de objeto es (archivo o directorio). Además, deberá informar la cantidad de archivos o directorios inexistentes en el sistema.
 
+```bash
+#!/bin/bash
 
+if [ $# -eq 0 ]; then
+  exit 1
+fi
+
+params=($@)
+no_exist=0
+for ((i = 0; i < $#; i++)); do
+  actual=${params[$i]}
+  if [ $(($i % 2)) -eq 0 ]; then
+    if [ -e $actual ]; then
+      if [ -f $actual ]; then
+        echo Es un archivo
+      else
+        echo Es un directorio
+      fi
+    else
+      no_exist=$(($no_exist + 1))
+    fi
+  fi
+done
+
+echo Inexistentes: $no_exist
+```
 
 ## 27. Realice un script que implemente a través de la utilización de funciones las operaciones básicas sobre arreglos:
 - inicializar: Crea un arreglo llamado array vacío
@@ -824,7 +849,75 @@ done
 - imprimir: Imprime todos los elementos del arreglo en pantalla
 - inicializar_Con_Valores <parametro1><parametro2>: Crea un arreglo con longitud <parametro1>y en todas las posiciones asigna el valor <parametro2>
 
+```bash
+
+#!/bin/bash
+
+verificar_param() {
+  if [ $1 -ne $2 ]; then
+    exit 1
+  fi
+}
+
+function inicializar {
+  array=()
+}
+
+agregar_elem() {
+  verificar_param $# 1
+  array+=($1)
+}
+function eliminar_elem {
+  verificar_param $# 1
+  long=${#array[@]}
+  if [ $long -ge $1 ]; then
+    unset array[$1-1]
+  fi
+}
+
+function longitud {
+  echo ${#array[@]}
+}
+
+imprimir() {
+  echo ${array[@]}
+}
+
+inicializar_con_valores() {
+  verificar_param $# 2
+  array=()
+  for ((i = 0; i < $1; i++)); do
+    array+=($2)
+  done
+}
+
+inicializar
+agregar_elem 1
+agregar_elem 22
+agregar_elem 23
+agregar_elem 42
+imprimir
+eliminar_elem 2
+imprimir
+longitud
+inicializar_con_valores 1 3
+imprimir
+```
 ## 28. Realice un script que reciba como parámetro el nombre de un directorio. Deberá validar que el mismo exista y de no existir causar la terminación del script con código de error 4. Si el directorio existe deberá contar por separado la cantidad de archivos que en él se encuentran para los cuales el usuario que ejecuta el script tiene permiso de lectura y escritura, e informar dichos valores en pantalla. En caso de encontrar subdirectorios, no deberán procesarse, y tampoco deberán ser tenidos en cuenta para la suma a informar.
+
+```bash
+#!/bin/bash
+
+if [ $# -ne 1 ]; then
+  exit 1
+fi
+if [ ! -e $1 ]; then
+  exit 4
+else
+  echo $(ls -l $1 | grep '^-[rw]' | wc -l)
+fi
+
+```
 
 ## 29. Implemente un script que agregue a un arreglo todos los archivos del directorio /home cuya terminación sea .doc. Adicionalmente, implemente las siguientes funciones que le permitan acceder a la estructura creada:
 
@@ -834,5 +927,82 @@ done
 
 - borrarArchivo <nombre_de_archivo>: Consulta al usuario si quiere eliminar el archivo lógicamente. Si el usuario responde Si, elimina el elemento solo del arreglo. Si el usuario responde No, elimina el archivo del arreglo y también del FileSystem. Debe validar que el archivo exista en el arreglo. En caso de no existir, imprime el mensaje de error “Archivo no encontrado” y devuelve como valor de retorno 10
 
-## 30. Realice un script que mueva todos los programas del directorio actual (archivos ejecutables) hacia el subdirectorio “bin” del directorio HOME del usuario actualmente logueado. El script debe imprimir en pantalla los nombres de los que mueve, e indicar cuántos ha movido, o que no ha movido ninguno. Si el directorio “bin” no existe,deberá ser creado.
+```bash
+#!/bin/bash
 
+# touch /home/ex1.doc /home/ex3.doc /home/ex2.doc
+
+directorio="/home/"
+array=($(ls $directorio | grep ".doc"))
+
+cantidadArchivos() {
+  echo ${#array[@]}
+}
+
+verArchivo() {
+  if [ $# -ne 1 ]; then
+    exit 1
+  fi
+  for archivo in ${array[@]}; do
+    if [ $archivo = $1 ]; then
+      echo $(cat $directorio$1)
+      exit 1
+    fi
+  done
+  echo "Archivo no encontrado"
+  exit 5
+}
+
+borrarArchivo() {
+  if [ $# -ne 1 ]; then
+    exit 1
+  fi
+  pos=-1
+  for ((i = 0; i < ${#array[@]}; i++)); do
+    if [ ${array[$i]} = $1 ]; then
+      pos=$i
+      break
+    fi
+  done
+  if [ $pos = -1 ]; then
+    echo "Archivo no encontrado"
+    exit 10
+  fi
+
+  echo "Desea eliminar el archivo logicamente? (Si / No)"
+  read respuesta
+  if [ $respuesta = "Si" ]; then
+    unset array[$i]
+  elif [ $respuesta = "No" ]; then
+    unset array[$i]
+    $(sudo rm -rf $directorio$1)
+  else
+    echo Respuesta incorrecta
+  fi
+}
+
+cantidadArchivos
+borrarArchivo "ex3.doc"
+cantidadArchivos
+verArchivo "ex1.doc"
+```
+
+## 30. Realice un script que mueva todos los programas del directorio actual (archivos ejecutables) hacia el subdirectorio “bin” del directorio HOME del usuario actualmente logueado. El script debe imprimir en pantalla los nombres de los que mueve, e indicar cuántos ha movido, o que no ha movido ninguno. Si el directorio “bin” no existe,deberá ser creado.
+```bash
+#!/bin/bash
+home="~/"
+
+if [ ! -e "$home/bin" ]; then
+  $(mkdir "$home/bin")
+fi
+contador=0
+exes=($(ls -l | grep "^-" | awk '{print $9}'))
+for exe in ${exes[@]}; do
+  salida=$(mv "./$exe" "$home/bin")
+  if [salida]; then
+    echo "Se movio $exe con exito"
+    contador=$((contador + 1))
+  fi
+done
+echo "Se han movido $contador archivos"
+```
