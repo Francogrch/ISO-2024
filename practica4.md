@@ -195,7 +195,172 @@ Los estados posibles por los que puede atravesar un proceso son:
 - El Medium Term Scheduler maneja la transición entre Ready y Suspend.
 - El Long Term Scheduler gestiona la transición desde New a Ready.
 
+## 3. Para los siguientes algoritmos de scheduling:
+- FCFS (Fisrt Coome First Served)
+- SJF (Shortest Job First)
+- Round Robin
+- Prioridades
+
+### (a) Explique su funcionamiento mediante un ejemplo.
+#### FCFS - First come first served
+- Cuando hay que elegir un proceso para ejecutar, se selecciona el mas viejo
+- No favorece a ningún tipo de procesos, pero en principio prodı́amos decir que los CPU Bound terminan al comenzar su primer ráfaga, mientras que los I/O Bound no
+*Ejemplo*:
+Al momento de elegir un proceso para ocupar la CPU, el algoritmo de FCFS toma de la cola de Ready el proceso que mas tiempo este en la cola.
+
+#### SJF (Shortest Job First)
+- Polı́tica nonpreemptive que selecciona el proceso con la ráfaga más corto
+- Calculo basado en la ejecución previa
+- Procesos cortos se colocan delante de procesos largos
+- Los procesos largos pueden sufrir starvation (inanición)
+
+*Ejemplo*:
+Al momento de seleccionar un proceso de la cola de Ready, se toma el proceso que menos tiempo halla utilizado la CPU anteriormente.
+
+#### Round Robin
+
+- Politica basada en un reloj
+- Quantum (Q): medida que determina cuanto tiempo podrá usar el procesador cada proceso:
+- Cuando un proceso es expulsado de la CPU es colocado al final de la Ready Queue y se selecciona otro (FIFO circular )
+- Existe un “contador” que indica las unidades de CPU en las que el proceso se ejecuto. Cuando el mismo llega a 0 el proceso es expulsado
+- El “contador” puede ser: Global o Local ( PCB )
+- Existen dos variantes con respecto al valor inicial del “contador” cuando un proceso es asignado a la CPU: Timer Variable - Timer Fijo
+*Ejemplo*:
+Se utiliza una cola, se selecciona el que esta en el tope de la cola, al terminar el Quantum, si no finalizo la ejecucion vuelve a ingresar a la cola, y se selecciona el siguiente del tope de la cola.
+
+#### Prioridades
+- Cada proceso tiene un valor que representa su prioridad → menor valor, mayor prioridad
+- Se selecciona el proceso de mayor prioridad de los que se encuentran en la Ready Queue
+- Existe una Ready Queue por cada nivel de prioridad
+-  Procesos de baja prioridad pueden sufrir starvation (inanición)
+- Solución: permitir a un proceso cambiar su prioridad durante su ciclo de vida → Aging o Penalty
+- Puede ser un algoritmo preemptive o no
+
+*Ejemplo*:
+Se selecciona de la cola con mayor prioridad, si tiene procesos, si no tiene va a la cola de prioridad proxima inferior, y se selecciona el proceso. 
 
 
+### (b) ¿Alguno de ellos requiere algún parámetro para su funcionamiento?
+Si, El SJF precisa un historial de uso de cpu de cada proceso, y Round Robin precisa el Quantum.
 
+### (c) Cual es el mas adecuado según los tipos de procesos y/o SO.
+CPU Bound:
+- Prioridades
+- FCFS
+
+I/O Bound:
+- SJF
+- Prioridades
+- Round Robin
+### (d) Cite ventajas y desventajas de su uso.
+- FCFS:
+Ventaja: Todos los procesos terminar de la manera mas rapida posible.
+Desventaja: No hay grado de multiprogramacion
+- SJF:
+Ventaja: El conjunto de jobs que menos tiempo tarden, terminaran en menos tiempo.
+Desventaja: Los jobs que tarden mas, pueden sufrir inanicion. 
+- Round Robin:
+Ventaja: Sube el grado de multiprogramacion
+Desventaja: Si un job no termina en un quantum, tendra que esperar a que se de la vuelta a la cola.
+- Prioridades:
+Ventaja: brinda mas control sobre la eleccion entre procesos
+Desventaja: Los procesos con menos prioridad pueden sufrir inanicion, logica estructural mas compleja.
+
+## 4. Para el algoritmo Round Robin, existen 2 variantes:
+- Timer Fijo
+- Timer Variable
+
+### (a) ¿Qué significan estas 2 variantes?
+- Timer Fijo:
+El “contador” se inicializa en Q cuando su valor es cero if (contador == 0) contador = Q;
+- Timer Variable:
+El “contador” se inicializa en Q (contador := Q) cada vez que un proceso es asignado a la CPU. Es el más utilizado.
+
+### (b) Explique mediante un ejemplo sus diferencias.
+Con el Timer Fijo, al momento que un proceso sale de la CPU y entra otro proceso, el Quantum no vuleve a 0, y lo que resta del Quantum es lo que el segundo proceso utiliza de CPU. Mientras que con el Timer Variable, cuando un proceso sale de la CPU el Quantum se actualiza y el siguiente proceso puede ejecutar un Quatum entero.
+
+### (c) En cada variante ¿Dónde debería residir la información del Quantum?
+En el caso de un Timer Fijo, la información del Quantum podría estar en una estructura de control de procesos global, ya que el contador se mantiene constante entre procesos. En cambio, con un Timer Variable, cada proceso tiene su propio Quantum que se reinicia al asignarse la CPU, por lo que sería más adecuado almacenarlo en la PCB (Process Control Block) de cada proceso para un control individual y más dinámico.
+
+## 5. Se tiene el siguiente lote de procesos que arriban al sistema en el instante 0 (cero):
+
+|-----|-----------------|
+| Job | Unidades de CPU |
+|-----|-----------------|
+|  1  |       7         |
+|  2  |      15         |
+|  3  |      12         |
+|  4  |       4         |
+|  5  |       9         |
+|-----|-----------------|
+```
+# Ejercicio5
+TAREA "1"  INICIO=0
+[CPU,7]
+
+TAREA "2"  INICIO=0
+[CPU,15]
+
+TAREA "3"  INICIO=0
+[CPU,12]
+
+TAREA "4"  INICIO=0
+[CPU,4]
+
+TAREA "5"  INICIO=0
+[CPU,9]
+```
+
+### (a) Realice los diagramas de Gantt según los siguientes algoritmos de scheduling:
+#### i. FCFS (First Come, First Served)
+#### ii. SJF (Shortest Job First)
+#### iii. Round Robin con quantum = 4 y Timer Fijo
+#### iv. Round Robin con quantum = 4 y Timer Variable
+
+### (b) Para cada algoritmo calcule el TR y TE para cada job así como el TPR y el TPE.
+### (c) En base a los tiempos calculados compare los diferentes algoritmos.
+
+## 6. Se tiene el siguiente lote de procesos:
+### (a) Realice los diagramas de Gantt según los siguientes algoritmos de scheduling:
+
+|-----|---------|-----------------|
+| Job | Llegada | Unidades de CPU |
+|-----|---------|-----------------|
+|  1  |    0    |       4         |
+|  2  |    2    |       6         |
+|  3  |    3    |       4         |
+|  4  |    6    |       5         |
+|  5  |    8    |       2         |
+|-----|---------|-----------------|
+```
+# Ejercicio6
+TAREA "1"  INICIO=0
+[CPU,4]
+
+TAREA "2"  INICIO=2
+[CPU,6]
+
+TAREA "3"  INICIO=3
+[CPU,4]
+
+TAREA "4"  INICIO=6
+[CPU,5]
+
+TAREA "5"  INICIO=8
+[CPU,2]
+
+```
+
+#### i. FCFS (First Come, First Served)
+#### ii. SJF (Shortest Job First)
+#### iii. Round Robin con quantum = 1 y Timer Variable
+#### iv. Round Robin con quantum = 6 y Timer Variable
+### (b) Para cada algoritmo calcule el TR y TE para cada job así como el TPR y el TPE.
+### (c) En base a los tiempos calculados compare los diferentes algoritmos.
+### (d) En el algoritmo Round Robin, que conclusión se puede sacar con respecto al valor del quantum.
+### (e) ¿Para el algoritmo Round Robin, en que casos utilizaría un valor de quantum alto y que ventajas y desventajas obtendría?
+
+## 7. Una variante al algoritmo SJF es el algoritmo SJF apropiativo o SRTF (Shortest Remaining Time First):
+### (a) Realice el diagrama del Gantt para este algoritmo según el lote de trabajos del ejercicio 6.
+### (b) ¿Nota alguna ventaja frente a otros algoritmos?
 
