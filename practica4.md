@@ -363,4 +363,285 @@ TAREA "5"  INICIO=8
 ## 7. Una variante al algoritmo SJF es el algoritmo SJF apropiativo o SRTF (Shortest Remaining Time First):
 ### (a) Realice el diagrama del Gantt para este algoritmo según el lote de trabajos del ejercicio 6.
 ### (b) ¿Nota alguna ventaja frente a otros algoritmos?
+En este ejemplo, el resultado es el mismo, aunque SRTF tiene igual o menos tiempo de respuesta y de espera.
+
+## 8. Suponga que se agregan las siguientes prioridades al lote de procesos del ejercicio 6, donde un menor número indica mayor prioridad:
+`
+|-----|-----------|---------|-----------------|
+| Job | Prioridad | Llegada | Unidades de CPU |
+|-----|-----------|---------|-----------------|
+|  1  |     3     |    0    |       4         |
+|  2  |     4     |    2    |       6         |
+|  3  |     2     |    3    |       4         |
+|  4  |     1     |    6    |       5         |
+|  5  |     2     |    8    |       2         |
+|-----|-----------|---------|-----------------|
+`
+### (a) Realice el diagrama de Gantt correspondiente al algoritmo de planificación por prioridades según las variantes:
+i. No Apropiativa
+ii. Apropiativa
+
+### (b) Calcule el TR y TE para cada job así como el TPR y el TPE.
+
+### (c) ¿Nota alguna ventaja frente a otros algoritmos? Bajo que circunstancias lo utilizaría y ante que situaciones considera que la implementación de prioridades podría no ser de mayor relevancia?
+La ventaja es que el Sistema Operativo se adapte mejor a la necesidad del uso de la CPU, pudiendo administrar las prioridades, y estas pueden ser cambiadas segun ciertas circunstancias.
+Lo utilizaria en situaciones donde las prioridades de ejecucion puedan variar sobre el tiempo aprovechando la capacidad de decision al elegir diferentes pocesos con diferentes prioridades.
+
+## 9. Inanición (Starvation)
+### (a) ¿Qué significa?
+Es cuando un proceso queda al final de la estructura y nunca llega a elegirse, por ende, nunca se ejecuta.
+
+### (b) ¿Cuál/es de los algoritmos vistos puede provocarla?
+- Prioridades
+- SRTF
+
+### (c) ¿Existe alguna técnica que evite la inanición para el/los algoritmos mencionados en b?
+Si, Aging es la tecnica. Si no se ejecuta en determinado tiempo, aumenta la prioridad de ejecucion.
+
+## 10. Los procesos, durante su ciclo de vida, pueden realizar operaciones de I/O como lecturas o escrituras a disco, cintas, uso de impresoras, etc. El SO mantiene para cada dispositivo, que se tiene en el equipo, una cola de procesos que espera por la utilización del mismo (al igual que ocurre con la Cola de Listos y la CPU, ya que la CPU es un dispositivo mas). Cuando un proceso en ejecución realiza una operación de I/O el mismo es expulsado de la CPU y colocado en la cola correspondiente a el dispositivo involucrado en la operación. El SO dispone también de un “I/O Scheduling” que administrada cada cola de dispositivo a través de algún algoritmo (FCFS, Prioridades, etc.). Si al colocarse un proceso en la cola del dispositivo, la misma se encuentra vacía el mismo será atendido de manera inmediata, caso contrario, deberá esperar a que el SO lo seleccione según el algoritmo de scheduling establecido. Los mecanismos de I/O utilizados hoy en día permiten que la CPU no sea utilizada durante la operación, por lo que el SO puede ejecutar otro proceso que se encuentre en espera una vez que el proceso bloqueado por la I/O se coloca en la cola correspondiente. Cuando el proceso finaliza la operación de I/O el mismo retorna a la cola de listos para competir nuevamente por la utilización de la CPU.
+
+Para los siguientes algoritmos de Scheduling:
+- FCFS
+- Round Robin con quantum = 2 y timer variable.
+
+Y suponiendo que la cola de listos de todos los dispositivos se administra mediante FCFS, realice los diagramas de Gantt según las siguientes situaciones:
+
+## (a) Suponga que al lote de procesos del ejercicio 6 se agregan las siguientes operaciones de entrada salida:
+
+Job | I/O (rec,ins,dur)
+1   | (R1, 2, 1)
+2   | (R2, 3, 1) (R2, 5, 2)
+3   | (R3, 1, 2) (R3, 3, 1)
+
+## (b) Suponga que al lote de procesos del ejercicio 6 se agregan las siguientes operaciones de entrada salida:
+
+Job | I/O (rec,ins,dur)
+1   | (R1, 2, 3) (R1, 3, 2)
+2   | (R2, 3, 2)
+3   | (R2, 2, 3)
+4   | (R1, 1, 2)
+
+## 11. Algunos algoritmos pueden presentar ciertas desventajas cuando en el sistema se cuenta con procesos ligados a CPU y procesos ligados a entrada salida. Analice las mismas para los siguientes algoritmos:
+### (a) Round Robin
+Al tener una unica cola, es necesario que el proceso recorra toda la cola al terminar el quantum, lo que lelvaria que un proceso que dure poco en la cpu, y sea mas grande que el quantum, como por ejemplo un proceso de entrada salida, tarde mas.
+
+### (b) SRTF (Shortest Remaining Time First)
+Mientras que el SRTF benefian a los procesos de entrada salida, ya que el cambio entre procesos lo hara cuando se ingrese uno nuevo en la cola, y no tiene que dar toda la vuelta a la cola. 
+
+
+## 12. Para equiparar la desventaja planteada en el ejercicio 11), se plantea la siguiente modificación al algoritmo:
+Algoritmo VRR (Virtual Round Robin): Este algoritmo funciona igual que el Round Robin, con la diferencia que cuando un proceso regresa de una I/O se coloca en una cola auxiliar. Cuando se tiene que tomar el próximo proceso a ejecutar, los procesos que se encuentra en la cola auxiliar tienen prioridad sobre los otros. Cuando se elije un proceso de la cola auxiliar se le otorga el procesador por tantas unidades de tiempo como le falto ejecutar en su ráfaga de CPU anterior, esto es, se le otorga la CPU por un tiempo que surge entre la diferencia del quantum original y el tiempo usado en la última ráfaga de CPU.
+
+### (a) Analice el funcionamiento de este algoritmo mediante un ejemplo. Marque en cada instante en que cola se encuentran los procesos.
+### (b) Realice el ejercicio 10)a) nuevamente considerando este algoritmo, con un quantum de 2 unidades y Timer Variable.
+
+
+## 13. Suponga que un SO utiliza un algoritmo de VRR con Timer Variable para el planificar sus procesos. Para ello, el quantum es representado por un contador, que es decrementado en 1 unidad cada vez que ocurre una interrupción de reloj. ¿Bajo este esquema, puede suceder que el quantum de un proceso nunca llegue a 0 (cero)? Justifique su respuesta.
+Siempre va a llegar a 0 debido a que, por mas que un proceso haga una I/O al volver quedara con el quantum que le faltaba, hasta que llegue a 0.
+
+## 14. El algoritmo SJF (y SRTF) tiene como problema su implementación, dada la dificultad de conocer la duración de la próxima ráfaga de CPU. Es posible realizar una estimación de la próxima, utilizando la media de las ráfagas de CPU para cada proceso. Así, por ejemplo, podemos tener la siguiente formula:
+Sn+1 = 1/n Tn + (n−1 / n)Sn
+
+Donde:
+Ti = duración de la ráfaga de CPU i-ésima del proceso.
+Si = valor estimado para el i-ésimo caso
+Si = valor estimado para la primer ráfaga de CPU. No es calculado.
+
+### (a) Suponga un proceso cuyas ráfagas de CPU reales tienen como duración: 6, 4, 6, 4, 13, 13, 13 Calcule que valores se obtendrían como estimación para las ráfagas de CPU del proceso si se utiliza la formula 1, con un valor inicial estimado de S1 =10. La formula anterior 1 le da el mismo peso a todos los casos (siempre calcula la media). Es posible reescribir la formula permitiendo darle un peso mayor a los casos mas recientes y menor a casos viejos (o viceversa). Se plantea la siguiente formula:
+Sn+1 = αTn + (1 − α)Sn
+
+Con 0 h α h 1.
+
+### (b) Analice para que valores de α se tienen en cuenta los casos mas recientes.
+### (c) Para la situación planteada en a) calcule que valores se obtendrían si se utiliza la formula 2 con α = 0, 2; α = 0, 5 y α = 0, 8.
+### (d) Para todas las estimaciones realizadas en a y c ¿Cuál es la que mas se asemeja a las ráfagas de CPU reales del proceso?
+
+
+# WTF?
+
+
+## 15. Colas Multinivel
+Hoy en día los algoritmos de planificación vistos se han ido combinando para formar algoritmos más eficientes. Así surge el algoritmo de Colas Multinivel, donde la cola de procesos listos es divida en varias colas, teniendo cada una su propio algoritmo de planificación.
+
+
+### (a) Suponga que se tienen dos tipos de procesos: Interactivos y Batch. Cada uno de estos procesos se coloca en una cola según su tipo. ¿Qué algoritmo de los vistos utilizaría para administrar cada una de estas colas?. A su vez, se utiliza un algoritmo para administrar cada cola que se crea. Así, por ejemplo, el algoritmo podría determinar mediante prioridades sobre que cola elegir un proceso.
+Para la cola de interactivos utilizaria VRR o SRTF
+Para la cola de Batch utilizaria FCFS 
+### (b) Para el caso de las dos colas vistas en a: ¿Qué algoritmo utilizaría para planificarlas?
+Prioridades para la eleccion de colas 
+
+## 16. Suponga que en un SO se utiliza un algoritmo de planificación de colas multinivel. El mismo cuenta con 3 colas de procesos listos, en las que los procesos se encolan en una u otra según su prioridad. Hay 3 prioridades (1 , 2 , 3), donde un menor número indica mayor prioridad. Se utiliza el algoritmo de prioridades para la administración entre las colas. Se tiene el siguiente lote de procesos a ser procesados con sus respectivas operaciones de I/O:
+
+
+
+|-----|---------|-----------------|
+| Job | Llegada | Unidades de CPU |
+|-----|---------|-----------------|
+|  1  |    0    |       9         |
+|  2  |    1    |       5         |
+|  3  |    2    |       5         |
+|  4  |    3    |       7         |
+|  5  |    5    |       5         |
+|-----|---------|-----------------|
+
+
+Prioridad | I/O (rec,ins,dur)
+    1     | (R1, 4, 2) (R2, 6, 3) (R1, 8, 3)
+    2     | (R3, 3, 2) (R3, 4, 2)
+    3     | (R1, 4, 1)
+    2     | (R2, 1, 2) (R2, 5, 3)
+    1     | (R1, 2, 3) (R3, 4, 3)
+
+
+Suponiendo que las colas de cada dispositivo se administran atraves de FCFS y que cada cola de procesos listos se administra por medio de un algoritmo RR con un quantum de 3 unidades y Timer Variable, realice un diagrama de Gantt:
+
+### (a) Asumiendo que NO hay apropiación entre los procesos.
+### (b) Asumiendo que hay apropiación entre los procesos.
+
+## 17. En el esquema de Colas Multinivel, cuando se utiliza un algoritmo de prioridades para administrar las diferentes colas los procesos pueden sufrir starvation. La técnica de envejecimiento se puede aplicar a este esquema, haciendo que un proceso cambie de una cola de menor prioridad a una de mayor prioridad, después de cierto periodo de tiempo que el mismo se encuentra esperando en su cola. Luego de llegar a una cola en la que el proceso llega a ser atendido, el mismo retorna a su cola original.
+
+Por ejemplo: Un proceso con prioridad 3 esta en cola su cola correspondiente. Luego de X unidades de tiempo, el proceso se mueve a la cola de prioridad 2. Si en esta cola es atendido, retorna a su cola original, en caso contrario luego de sucederse otras X unidades de tiempo el proceso de mueve a la cola de prioridad 1. Esta última acción se repite hasta que el proceso obtiene la CPU, situación que hace que el mismo vuelva a su cola original.
+
+### (a) Para los casos a y b del ejercicio 16 realice el diagrama de Gantt considerando además que se tiene un envejecimiento de 4 unidades.
+
+## 18. La situación planteada en el ejercicio 17, donde un proceso puede cambiar de una cola a otra, se la conoce como Colas Multinivel con Realimentación.
+
+Suponga que se quiere implementar un algoritmo de planificación que tenga en cuenta el tiempo de ejecución consumido por el proceso, penalizando a los que más tiempo de ejecución tienen. (Similar a la tarea del algoritmo SJF que tiene en cuenta el tiempo de ejecución que resta).
+Utilizando los conceptos vistos de Colas Multinivel con Realimentación indique que colas implementaría, que algoritmo usaría para cada una de ellas así como para la administración de las colas entre sí. Tenga en cuenta que los procesos no deben sufrir inanición.
+
+Colas: SRTF
+Administrar colas: SFJ + envejecimiento
+
+## 19. Un caso real: “Unix Clasico “ (SVR3 y BSD 4.3)
+Estos sistemas estaban dirigidos principalmente a entornos interactivos de tiempo compartido. El algoritmo de planificación estaba diseñado para ofrecer buen tiempo de respuesta a usuarios interactivos y asegurar que los trabajos de menor prioridad (en segundo plano) no sufrieran inanición. La planificación tradicional usaba el concepto de colas multinivel con realimentación, utilizando RR para cada uno de las colas y realizando el cambio de proceso cada un segundo (quantum). La prioridad de cada proceso se calcula en función de la clase de proceso y de su historial de ejecución. Para ello se aplican las siguientes funciones:
+CP Uj (i − 1)
+2
+CP Uj (i)
+Pj (i) = Basej +
++ nicej
+2
+CP Uj (i) =
+
+(3)
+(4)
+
+donde:
+CPUj (i) = Media de la utilización de la CPU del proceso j en el intervalo i.
+Pj (i) = Prioridad del proceso j al principio del intervalo i (los valores inferiores indican
+prioridad más alta).
+Basej = Prioridad base del proceso j.
+Nicej = Factor de ajuste.
+La prioridad del proceso se calcula cada segundo y se toma una nueva decisión de planificación. El propósito de la prioridad base es dividir los procesos en bandas fijas de prioridad.
+Los valores de CPU y nice están restringidos para impedir que un proceso salga de la banda que tiene asignada. Las bandas definidas, en orden decreciente de prioridad, son:
+Intercambio
+Control de Dispositivos de I/O por bloques
+Gestión de archivos
+Control de Dispositivos de I/O de caracteres
+Procesos de usuarios
+Veamos un ejemplo: Supongamos 3 procesos creados en el mismo instante y con prioridad
+base 60 y un valor nice de 0. El reloj interrumpe al sistema 60 veces por segundo e incrementa
+un contador para el proceso en ejecución.
+Los sectores en celeste representan el proceso en ejecución.
+### (a) Analizando la jerarquía descripta para las bandas de prioridades: ¿Que tipo de actividad considera que tendrá más prioridad? ¿Por qué piensa que el scheduler prioriza estas actividades?
+### (b) Para el caso de los procesos de usuarios, y analizando las funciones antes descriptas: ¿Qué tipo de procesos se encarga de penalizar? (o equivalentemente se favorecen). Justifique
+### (c) La utilización de RR dentro de cada cola: ¿Verdaderamente favorece al sistema de Tiempo Compartido? Justifique.
+
+## 20. A cuáles de los siguientes tipos de trabajos:
+### (a) cortos acotados por CPU
+### (b) cortos acotados por E/S
+### (c) largos acotados por CPU
+### (d) largos acotados por E/S
+
+benefician las siguientes estrategias de administración:
+
+### (a) prioridad determinada estáticamente con el método del más corto primero (SJF).
+a y b
+### (b) prioridad dinámica inversamente proporcional al tiempo transcurrido desde la última operación de E/S.
+d
+
+## 21. Explicar porqué si el quantum "q.en Round-Robin se incrementa sin límite, el método se aproxima a FIFO.
+Porque nunca se generaria un context switch
+
+## 22. Los sistemas multiprocesador pueden clasificarse en:
+- Homogéneos: Los procesadores son iguales. Ningún procesador tiene ventaja física sobre el resto.
+- Heterogéneos: Cada procesador tiene su propia cola y algoritmo de planificación.
+Otra clasificación posible puede ser:
+- Multiprocesador débilmente acoplados: Cada procesador tiene su propia memoria principal y canales.
+- Procesadores especializados: Existe uno o más procesadores principales de propósito general y varios especializados controlados por el primero (ejemplo procesadores de E/S, procesadores Java, procesadores Criptográficos, etc.).
+- Multiprocesador fuertemente acoplado: Consta de un conjunto de procesadores que comparten una memoria principal y se encuentran bajo el control de un Sistema Operativo
+
+### (a) ¿Con cuál/es de estas clasificaciones asocia a las PCs de escritorio habituales?
+Homogeneo y multiprocesador fuertemente acoplado
+### (b) ¿Qué significa que la asignación de procesos se realice de manera simétrica?
+Que mantenga un balance de trabajo en todos los procesadores 
+### (c) ¿Qué significa que se trabaje bajo un esquema Maestro/esclavo?
+Que un procesador es el que dirige a los demas 
+
+
+## 23. Asumiendo el caso de procesadores homogéneos:
+### (a) ¿Cuál sería el método de planificación más sencillo para asignar CPUs a los procesos?
+El metodo seria utilizar una cola de procesadores donde se envien los procesos y a medida que se complenten se agreguen nuevamente a la cola de procesadores listos para trabajar junto con una cola de procesos de tipo FCFS
+
+### (b) Cite ventajas y desventajas del método escogido
+No hay prioridades
+
+## 24. Conceptos clave en Sistemas Operativos
+### (a) Huella de un proceso en un procesador
+
+Hace referencia a los datos que un proceso deja en la memoria caché del procesador, como instrucciones y datos frecuentemente usados. Esto mejora su rendimiento si vuelve a ejecutarse en el mismo núcleo.
+(b) Afinidad con un procesador
+
+Es la preferencia o asignación de un proceso para ejecutarse en un procesador específico o conjunto de núcleos, lo que optimiza el uso de la caché y reduce la latencia.
+### (c) ¿Por qué podría ser mejor que un proceso se ejecute en el mismo procesador?
+
+Para maximizar el rendimiento al reutilizar los datos en la caché del núcleo, reduciendo la latencia al evitar recargar datos en memoria.
+### (d) ¿Puede el usuario cambiar la afinidad de un proceso?
+
+    Windows: Sí, desde el Administrador de tareas o usando taskset.
+    GNU/Linux: Sí, con el comando taskset o desde herramientas gráficas como htop.
+
+### (e) Balanceo de carga (load balancing)
+
+Es la distribución equitativa de la carga de trabajo entre múltiples procesadores o sistemas, asegurando que ninguno esté sobrecargado mientras otros están infrautilizados.
+### (f) Comparación: afinidad vs. balanceo de carga
+
+    Afinidad: Optimiza el rendimiento al mantener un proceso en un procesador específico.
+    Balanceo de carga: Prioriza distribuir tareas para maximizar el uso de los recursos.
+    Relación: La afinidad puede dificultar el balanceo si los procesos quedan anclados a un núcleo sobrecargado.
+## 25. Si a la tabla del ejercicio 6 la modificamos de la siguiente manera: Y considerando que el Job
+1
+2
+3
+4
+5
+
+Llegada
+0
+2
+3
+6
+8
+
+CPU
+4
+6
+4
+5
+2
+
+Afinidad
+CPU0
+CPU0
+CPU1
+CPU1
+CPU0
+
+scheduler de los Sistemas Operativos de la familia Windows utiliza un mecanismo denominado preferred processor (procesador preferido). El scheduler usa el procesador preferido a
+modo de afinidad cuando el proceso esta en estado ready. De esta manera el sheduler asigna
+este procesador a la tarea si este está libre.
+
+### (a) Ejecute el esquema anterior utilizando el algoritmo anterior.
+### (b) Ejecute el esquema anterior. Pero ahora si el procesador preferido no está libre es asignado a otro procesador. Luego el procesador preferido de cada job es el último en el cual ejecuto.
+### (c) Para cada uno de los casos calcule el tiempo promedio de retorno y el tiempo promedio de espera.
+### (d) ¿Cuál de las dos alternativas planteadas es mas performante?
 
