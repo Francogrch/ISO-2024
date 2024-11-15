@@ -609,36 +609,17 @@ Es la distribución equitativa de la carga de trabajo entre múltiples procesado
     Balanceo de carga: Prioriza distribuir tareas para maximizar el uso de los recursos.
     Relación: La afinidad puede dificultar el balanceo si los procesos quedan anclados a un núcleo sobrecargado.
 ## 25. Si a la tabla del ejercicio 6 la modificamos de la siguiente manera: Y considerando que el Job
-1
-2
-3
-4
-5
+scheduler de los Sistemas Operativos de la familia Windows utiliza un mecanismo denominado preferred processor (procesador preferido). El scheduler usa el procesador preferido a modo de afinidad cuando el proceso esta en estado ready. De esta manera el sheduler asigna este procesador a la tarea si este está libre.
 
-Llegada
-0
-2
-3
-6
-8
 
-CPU
-4
-6
-4
-5
-2
 
-Afinidad
-CPU0
-CPU0
-CPU1
-CPU1
-CPU0
+| Job | Llegada | CPU | Afinidad |
+|  1  |    0    |  4  |   CPU0   |
+|  2  |    2    |  6  |   CPU0   |
+|  3  |    3    |  4  |   CPU1   |
+|  4  |    6    |  5  |   CPU1   |
+|  5  |    8    |  2  |   CPU0   |
 
-scheduler de los Sistemas Operativos de la familia Windows utiliza un mecanismo denominado preferred processor (procesador preferido). El scheduler usa el procesador preferido a
-modo de afinidad cuando el proceso esta en estado ready. De esta manera el sheduler asigna
-este procesador a la tarea si este está libre.
 
 ### (a) Ejecute el esquema anterior utilizando el algoritmo anterior.
 ### (b) Ejecute el esquema anterior. Pero ahora si el procesador preferido no está libre es asignado a otro procesador. Luego el procesador preferido de cada job es el último en el cual ejecuto.
