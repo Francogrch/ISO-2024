@@ -663,15 +663,37 @@ Considerando una política de Asignación Dinámica y Reemplazo Global y disponi
 ### b) FIFO
 ### c) LRU
 
+Resuelto en archivo practica5.xlsx
+
 ---
 
 ## 25.- Hiperpaginación (Trashing)
 ### a) ¿Qué es?
+Concepto: decimos que un sistema está en thrashing cuando pasa más tiempo paginando que ejecutando procesos.
+
 ### b) ¿Cuáles pueden ser los motivos que la causan?
+Ocurre cuando los marcos estan llenos y las paginas que se necesitan no estan cargadas, y una vez que se cargan se piden las anteriores, de esta manera la cpu estaria haciendo mas paginacion que ejecutando procesos.
+
 ### c) ¿Cómo la detecta el SO?
+Lo detecta el kernel monitoriando la CPU.
+
 ### d) Una vez que lo detecta, ¿qué acciones puede tomar el SO para eliminar este problema?
 
+Esto se puede cambiar en el tiempo?
+- Se puede limitar el thrashing usando algoritmos de reemplazo local.
+- Con este algoritmo, si un proceso entra en thrashing no roba frames a otros procesos.
+- Si bien perjudica la performance del sistema, es controlable.
+
+
+- Bajando el grado de multiprogramación
+- Utilizando modelo de localidad
+- Utilzando modelo de wotking set 
+- Utilizando PFF
+
+En el peor de los casos, si hay trashing se debe suspender algun proceso.
+
 ---
+
 ## 26.- Considere un sistema cuya memoria principal se administra mediante la técnica de paginación por demanda que utiliza un dispositivo de paginación, algoritmo de reemplazo global LRU y una política de asignación que reparte marcos equitativamente entre los procesos. El nivel de multiprogramación es actualmente, de 4.
 
 Ante las siguientes mediciones:
@@ -680,8 +702,14 @@ b) Uso de CPU del 87%, uso del dispositivo de paginación del 3%.
 c) Uso de CPU del 13%, uso del dispositivo de paginación del 3%.
 Analizar:
 ### ¿Qué sucede en cada caso?
+a) No alcanzan los marcos para todos los requerimientos de paginas de los procesos, por ende, al haber un fallo de pagina y al ser reemplazo global, aumenta el trashing 
+b) Hay pocas fallos de paginas, los marcos sobran para poder ejecutar los 4 procesos.
+c) Esta haciendo swapping, moviendo datos.
 ### ¿Puede incrementarse el nivel de multiprogramación para aumentar el uso de la CPU?
+Si, en el caso que tengas la sufciente catidad de marcos.
+
 ### ¿La paginación está siendo útil para mejorar el rendimiento del sistema?
+Depende, si los FP son altos, no mejora el rendimiento, si no lo empeora, pero si se mantiene FP bajos, mejora.
 
 ---
 ## 27.- Considere un sistema cuya memoria principal se administra mediante la técnica de paginación por demanda. Considere las siguientes medidas de utilización:
@@ -692,8 +720,10 @@ Analizar:
 Cuales de las siguientes acciones pueden mejorar la utilización del procesador:
 ### a) Instalar un procesador mas rápido
 ### b) Instalar un dispositivo de paginación mayor
+Al reducir el tiempo de acceso a las páginas en memoria secundaria, el procesador pasará menos tiempo esperando, lo que podría aumentar su uso.
 ### c) Incrementar el grado de multiprogramación
 ### d) Instalar mas memoria principal
+Te da la posibilidad de tener mas marcos, por ende mas paginas cargadas.
 ### e) Decrementar el quantum para cada proceso
 
 ---
@@ -710,17 +740,40 @@ Donde:
 Suponga que tenemos una memoria virtual paginada, con tabla de paginas de 1 nivel, y donde la tabla de páginas se encuentra completamente en la memoria. Servir una falla de página tarda 300 nanosegundos si hay disponible un marco vacío o si la página reemplazada no se ha modificado, y 500 nanosegundos si se ha modificado. El tiempo de acceso a memoria es de 20 nanosegundos y el de acceso a la TLB es de 1 nanosegundo
 
 ### a) Si suponemos una taza de fallos de página de 0,3 y que siempre contamos con un marco libre para atender el fallo ¿Cual será el TAE si el 50% de las veces la entrada de la tabla de páginas se encuentra en la TLB (hit)?
+
+TAE = 20 + ((1-0.3) * 20) + (0.3 * (300 + 20)) =
+20 + (0.7*20) + (0.3 * 320) =
+20 + 14 + 96 = 130
+TAE = 1 + (1-0.3) * 20 + 0.3 * (300 + 20) = 111
+Promedio = (130 + 111) / 2 = 120.5 
+
 ### b) Si suponemos una taza de fallos de página de 0,3; que el 70% de las ocasiones la pagina a reemplazar se encuentra modificada. ¿Cual será el TAE si el 60% de las veces la entrada de la tabla de páginas se encuentra en la TLB (hit)?
+
+TAE = (20*0.4+1*0.6) + ((1-0.3) * 20) + (0.3 * ((300*0.3+500*0.7) + 20)) = 160,6
+
 ### c) Si suponemos que el 60% de las veces la pagina a reemplazar esta modificada, el 100% de las veces la entrada de la tabla de páginas requerida se encuentra en la TLB (hit) y se espera un TAE menor a 200 nanosegundos. ¿Cuál es la máxima tasa aceptable de fallas de página?
+
+TAE = 1 + ((1-0.3) * 20) + (0.3 * ((300*0.4+500*0.6) + 20)) = 147 
+
+200 = 1 + ((1-p) * 20) + (p * ((300*0.4+500*0.6) + 20)) = 147 
+200 = 1 + ((1-p) * 20) + (p * (420 + 20)))
+1 + 20 -20p + 420p +20p = 200
+420p = 200 -1 -20 
+p = 179 / 420 = 0.426
+p = 42.6%
 
 ---
 ## 29.- Anomalía de Belady
 ### a) ¿Qué es?
+Es un fenómeno en sistemas de memoria virtual donde, al incrementar el número de marcos disponibles para un algoritmo de reemplazo de páginas (como FIFO), el número de fallos de página puede aumentar en lugar de disminuir.
+
 ### b) Dada la siguiente secuencia de referencias a paginas:
 3, 2, 1, 0, 3, 2, 4, 3, 2, 1, 0, 4
 - I.Calcule la cantidad de fallos de páginas si se cuentan con 3 marcos y se utiliza el algoritmo de reemplazo FIFO
 - II. Calcule la cantidad de fallos de páginas si se cuentan con 4 marcos y se utiliza el algoritmo de reemplazo FIFO
 Analice la situación
+
+Esto ocurre debido a que el algoritmo FIFO es simplemente una cola, sin tener en cuenta las  paginas que se pueden llegar a utilizar despues, y si llega el caso en que entremos en un bucle de liberar marcos, por pedido de pagina, y luego se necesita esa pagina, vamos a tener mas PF.
 
 ---
 ## 30.- Considere el siguiente programa:
@@ -729,16 +782,30 @@ Analice la situación
       int A[Size; Size], B[Size; Size], C[Size; Size];
       int register i, j;
       for (j = 0; j < Size; j ++)
-      for (i = 0; i < Size; i++)
-      C[i; j] = A[i; j] + B[i; j];
+          for (i = 0; i < Size; i++)
+              C[i; j] = A[i; j] + B[i; j];
 `
 
-Si asumimos que el programa se ejecuta en un sistema que utiliza paginación por demanda para administrar la memoria, donde cada pagina es de 1Kb. Cada número entero (int) ocupa 4 bytes. Es claro que cada matriz requiere de 16 páginas para almacenarse. Por ejemplo: A[0,0]..A[0,63], A[1,0]..A[1,63], A[2,0]..A[2,63] y A[3,0]..A[3,63] se almacenara en la primer pagina. Asumamos que el sistema utiliza un working set de 4 marcos para este proceso. Uno de los 4 marcos es utilizado por el programa y los otros 3 se utilizan para datos (las matrices). También asumamos que para los índices “i” y “j” se utilizan 2 registros, por lo que no es necesario el acceso a la memoria para estas 2 variables.
+Si asumimos que el programa se ejecuta en un sistema que utiliza paginación por demanda para administrar la memoria, donde cada pagina es de 1Kb. Cada número entero (int) ocupa 4 bytes. Es claro que cada matriz requiere de 16 páginas para almacenarse. Por ejemplo: A[0,0]..A[0,63], A[1,0]..A[1,63], A[2,0]..A[2,63] y A[3,0]..A[3,63] se almacenara en la primer pagina. 
+Asumamos que el sistema utiliza un working set de 4 marcos para este proceso. Uno de los 4 marcos es utilizado por el programa y los otros 3 se utilizan para datos (las matrices). También asumamos que para los índices “i” y “j” se utilizan 2 registros, por lo que no es necesario el acceso a la memoria para estas 2 variables.
 
 ### a) Analizar cuantos fallos de paginas ocurren al ejecutar el programa (considere las veces que se ejecuta C[i,j] = A[i,j] + B[i,j])
+64x64 = 4096 se ejecuta la linea de adentro.
+250 n por pagina
+16 x 3 = 48 cant total de paginas
+48 es el PF
 
 
 ### b) Puede ser modificado el programa para minimizar el número de fallos de páginas. En caso de ser posible indicar la cantidad de fallos de fallos de páginas que ocurren.
+`C
+      #define Size 64
+      int A[Size; Size], B[Size; Size];
+      int register i, j;
+      for (j = 0; j < Size; j ++)
+          for (i = 0; i < Size; i++)
+              A[i; j] = A[i; j] + B[i; j];
+`
+16 x 2 = 32 PF
 
 ---
 ## 31.- Considere las siguientes secuencias de referencias a páginas de los procesos A y B, donde se muestra en instante de tiempo en el que ocurrió cada una (1 a 78):
@@ -746,8 +813,36 @@ Si asumimos que el programa se ejecuta en un sistema que utiliza paginación por
 *Cuadro en PDF*
 
 ### a) Considerando una ventana ∆=5, indique cual seria el conjunto de trabajo de los procesos A y B en el instante 24 (WSA(24) y WSB(24))
+
+WSAa(24) = {4,5,6}
+WSAb(24) = {2,3,5,6}
+
 ### b) Considerando una ventana ∆=5, indique cual seria el conjunto de trabajo de los procesos A y B en el instante 60 (WSA(60) y WSB(60))
+WSAa(60) = {1,2,3,4,5}
+WSAb(60) = {3,4,5}
+
 ### c) Para el los WS obtenidos en el inciso a), si contamos con 8 frames en el sistema ¿Se puede indicar que estamos ante una situación de trashing? ¿Y si contáramos con 6 frames?
+
+WSAa(24) = {4,5,6}
+WSAb(24) = {2,3,5,6}
+
+Con 8 frames no abria problemas, necesitamos solo 7 frames, para satifacer los procesos.
+Con 6 frames, va a haber trashing debido a que hay mas demanda que cantidad de frames.
+
 ### d) Considerando únicamente el proceso A, y suponiendo que al mismo se le asignaron inicialmente 4 marcos, donde el de reemplazo de paginas es realizado considerando el algoritmo FIFO. ¿Cuál será la taza de fallos en el instante 38 de páginas suponiendo que la misma se calcula contando los fallos de páginas que ocurrieron en las últimas 10 unidades de tiempo?
+
+
+WSAa(38) = {1,2,3,4,5}
+
+1 1 2 3 4 5 4 3 2 1 1
+x   x x x x       x  
+6 / 10 = 0.6
+60 % de fallos
+
 ### e) Para el valor obtenido en el inciso d), si suponemos que el S.O. utiliza como limites superior e inferior de taza de fallos de paginas los valores 2 y 5 respectivamente ¿Qué acción podría tomar el S.O. respecto a la cantidad de marcos asignados al proceso?
+
+0.2 y 0.5????
+
+El SO debe dar mas marcos al proceso A
+
 
