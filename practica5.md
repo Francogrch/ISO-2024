@@ -400,11 +400,26 @@ Cantidad maxima de paginas = 8192
 
 ---
 ## 16.- Como se vio en el ejercicio anterior, la tabla de páginas de un proceso puede alcanzar un tamaño considerablemente grande, que incluso, no podría almacenarse de manera completa en la memoria real. Es por esto que el SO también realiza paginación sobre las tablas de paginas. Existen varios enfoques para administrar las tablas de páginas:
+
 - Tablas de páginas de 1 nivel.
 - Tablas de páginas de 2 niveles.
 - Tablas de páginas invertidas.
 
 Explique brevemente como trabajan estos enfoques e indique como se realiza la transformación de la dirección virtual en dirección física.
+
+- Tablas de páginas de 1 nivel.
+En la direccion se utiliza un identificar de la pagina, y la otra parte de la direccion sirve para el desplazamiento. Es lineal.
+
+- Tablas de páginas de 2 niveles.
+
+Se utiliza una parte de la direccion para identificar el nivel 1, otra parte para el nivel 2, y la otra parte de la direccion para identificar el desplazamiento junto con su PTE (Page Table Entrie)
+Primero se busca la pagina en el nivel 1, luego en el nivel 2, y por ultimo se le suma el desplazamiento.
+
+- Tablas de páginas invertidas.
+
+Se utiliza una parte de la direccion para referenciar a la direccion virtual y su identificador, estos valres se ingresan en una funcion de hash, que nos retornara una key. Con esa key , junto con su offset vamos a poder identificar la direccion dentro de la tabla de hash, y alli se encuntra la direccion fisica.
+
+
 
 ---
 ## 17.- Suponga que la tabla de páginas para un proceso que se está ejecutando es la que se muestra a continuación:
@@ -417,7 +432,7 @@ Explique brevemente como trabajan estos enfoques e indique como se realiza la tr
 |   2    |   0   |   0   |   0   |   -   |
 |   3    |   1   |   0   |   0   |   2   |
 |   4    |   0   |   0   |   0   |   -   |
-|   5    |   1   |   0   |   1   |   -   |
+|   5    |   1   |   0   |   1   |   0   |
 |--------|-------|-------|-------|-------|
 
 Asumiendo que:
@@ -425,18 +440,44 @@ Asumiendo que:
 - Cada dirección de memoria referencia 1 byte
 - Los marcos se encuentras contiguos y en orden en memoria (0, 1, 2.. ) a partir de la dirección real 0.
 
+| Marco | Inicio-Fin |
+|   0   |   0-511    |
+|   1   |  512-1023  |
+|   2   |  1024-1535 |
+|   3   |  1536-2047 |
+|   4   |  2048-2559 |
+|   5   |  2560-3071 |
+
 *¿Qué dirección física, si existe, correspondería a cada una de las siguientes direcciones virtuales?*
 (No gestione ningún fallo de página, si se produce)
 ### a) 1052
+1052/512 = 2
+Tendria que estar en la pagina 2, tiene V=0, no esta cargada. Fallo de pagina.
 ### b) 2221
+2221/512 = 4
+Tendria que estar en la pagina 4, no esta cargada. Fallo de pagina
 ### c) 5499
+5499/512 = 10
+No hay pagina 10 cargada en la tabla. Fallo de pagina
 ### d) 3101
+3101/512 = 6
+No hay pagina 6 cargada en la tabla. Fallo de pagina
 
 ---
 ## 18.- Tamaño de la Página:
 La selección del tamaño de la página influye de manera directa sobre el funcionamiento de la memoria virtual. Compare las siguientes situaciones con respecto al tamaño de página, indicando ventajas y desventajas:
 - Un tamaño de página pequeño.
+    - Mas paginas a utilizar
+    - Menos fragmentacion interna
+    - Mas paginas pueden residir en memoria
+    - Mejora la multiprogramación
+    - Tabla de entrada de paginas mas grande
 - Un tamaño de página grande.
+    - Menos paginas a utilizar
+    - La memoria secundiaria transifiere por buffers, se aprovechan al utilizar paginas grandes. 
+    - Mas fragmentacion interna
+    - Menos entradas en la tabla de pagina
+    - Empeora la multiprogramación
 
 ---
 ## 19.- Asignación de marcos a un proceso (Conjunto de trabajo o Working Set):
@@ -444,12 +485,15 @@ Con la memoria virtual paginada, no se requiere que todas las páginas de un pro
 - Asignación Fija
 - Asignación Dinámica.
 ### a) Describa como trabajan estas 2 políticas.
+- Asignación Fija: La cantidad de marcos que se le asignan son fijos a todos los procesos
+- Asignación Dinámica: La cantidad de marcos que se le asignan a los procesos varian.
+
 ### b) Dada la siguiente tabla de procesos y las paginas que ellos ocupan, y teniéndose 40 marcos en la memoria principal, cuantos marcos le corresponderían a cada proceso si se usa la técnica de Asignación Fija:
 #### i) Reparto Equitativo
 #### ii) Reparto Proporcional
 
 |---------|-------------------------|
-| Proceso | Total de Paginas Usadas | 
+| Proceso | Total de Paginas Usadas |
 |---------|-------------------------|
 |    1    |          15             |
 |    2    |          20             |
@@ -457,11 +501,43 @@ Con la memoria virtual paginada, no se requiere que todas las páginas de un pro
 |    4    |          8              |
 |---------|-------------------------|
 
+#### i) Reparto Equitativo
+|---------|-------------------------|
+| Proceso |     Total de Marcos     |
+|---------|-------------------------|
+|    1    |          10             |
+|    2    |          10             |
+|    3    |          10             |
+|    4    |          10             |
+|---------|-------------------------|
+
+#### ii) Reparto Proporcional
+
+Cantidad = ((TamanioProceso)/(SumaTamaniosProcesos)) * CantMarcos
+
+    15+20+20+8 = 63
+    p1 = (15/63)*40 = 9.52
+    p2 = (20/63)*40 = 12.69
+    p3 = (20/63)*40 = 12.69
+    p4 = (8/63)*40 = 5.07
+
+|---------|-------------------------|
+| Proceso |     Total de Marcos     |
+|---------|-------------------------|
+|    1    |          10             |
+|    2    |          13             |
+|    3    |          13             |
+|    4    |          5              |
+|---------|-------------------------|
+
 ### c) ¿Cual de los 2 repartos usados en b) resulto mas eficiente? ¿Por qué?
+
+Es mas eficiente el Equitativo, ya que el proporcional nos faltaria un marco.
 
 ---
 ## 20.- Reemplazo de páginas (selección de una victima):
 ¿Qué sucede cuando todos los marcos en la memoria principal están usados por las páginas de los procesos y se produce en fallo de página? El SO debe seleccionar una de las páginas que se encuentra en memoria como victima, y ser reemplazada por la nueva página que produjo el fallo.
+
 Considere los siguientes algoritmos de selección de victimas básicos:
 - LRU
 - FIFO
@@ -469,28 +545,61 @@ Considere los siguientes algoritmos de selección de victimas básicos:
 - Segunda Chance
 
 ### a) Clasifique estos algoritmos de malo a bueno de acuerdo a la tasa de fallos de página que se obtienen al utilizarlos.
+- FIFO
+- Segunda Chance
+- LRU
+- OPT 
 
 ### b) Analice su funcionamiento. ¿Como los implementaría?
+- FIFO
+La seleccion es sobre el primero que se cargo. Primero que entra, primero que sale. Es una cola.
+- Segunda Chance
+Ademas de utilizar una cola, como el FIFO, tambien se tiene en cuenta las paginas que mas recientemente se ha referenciado. Si se encuntra una referenciada, la primera vez se omite, la segunda se va a seleccionar como victima.
+- LRU
+De acuerdo al tiempo que no se utilizo la pagina, se toma como victima, a la que mas tiempo hace que no se referencia.
+- OPT 
+Conociendo el futuro de las paginas que se van a precisar, se puede saber cual pagina no se va a utilizar.
+
 
 ### c) Sabemos que la pagina a ser reemplaza puede estar modificada. ¿Qué acciones debe llevar el SO cuando se encuentra ante esta situación?
+Es necesario que el SO, actualice en memoria ese cambio, antes de sacarla del marco.
 
 ---
 ## 21.- Alcance del reemplazo
 Al momento de tener que seleccionar una pagina victima, el SO puede optar por 2 políticas a utilizar:
 - Reemplazo local
 - Reemplazo global
+
 ### a) Describa como trabajan estas 2 políticas.
+- Reemplazo local: Solamente se puede reemplazar paginas de el mismo proceso que genero el fallo de pagina.
+- Reemplazo global: Puede reeemplazar cualquier pagina, de cualquier proceso.
+
 ### b) ¿Es posible utilizar la política de “Asignación Fija” de marcos junto con la política de “Reemplazo Global? Justifique.
+No se puede, ya que si ocurre un fallo de pagina, y se toma una marco de otro proceso, estaria modificando la cantidad de marcos que se le asigno al proceso previamente, y pasaria a ser una asignacion dinamica.
 
 ## 22.- Considere la siguiente secuencia de referencias de páginas:
 1, 2, 15, 4, 6, 2, 1, 5, 6, 10, 4, 6, 7, 9, 1, 6, 12, 11, 12, 2, 3, 1, 8, 1, 13, 14, 15, 3, 8
+
 ### a) Si se disponen de 5 marcos. ¿Cuántos fallos de página se producirán si se utilizan las siguientes técnicas de selección de victima? (Considere una política de Asignación Dinámica y Reemplazo Global)
 #### i) Segunda Chance
+CF=23
 #### ii) FIFO
+CF=21
 #### iii) LRU
+CF=22
 #### iv) OPT
+CF=16
 
 ### b) Suponiendo que cada atención de un fallo se pagina requiere de 0,1 seg. Calcular el tiempo consumido por atención a los fallos de páginas para los algoritmos de a).
+#### i) Segunda Chance
+CF=23*0.1=2,3 seg
+#### ii) FIFO
+CF=21*0.1=2,1 seg
+#### iii) LRU
+CF=22*0.1= 2,2 seg
+#### iv) OPT
+CF=16*0.1= 1,6 seg
+
 ## 23.- Sean los procesos A, B y C tales que necesitan para su ejecución las siguientes páginas:
 - A: 1, 3, 1, 2, 4, 1, 5, 1, 4, 7, 9, 4
 - B: 2, 4, 6, 2, 4, 1, 8, 3, 1, 8
