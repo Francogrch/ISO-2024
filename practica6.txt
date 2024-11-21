@@ -1,0 +1,242 @@
+Introducción a los Sistemas Operativos
+Práctica 6
+Objetivo
+El objetivo de esta práctica es que el alumno comprenda los aspectos principales acerca de la
+planificación de E/S y de discos.
+
+Administración de E/S
+1. Dispositivos
+(a) Los dispositivos, según la forma de transferir los datos, se pueden clasificar en 2 tipos:
+Orientados a bloques
+Orientados a flujos
+Describa las diferencias entre ambos tipos.
+(b) Cite ejemplos de dispositivos de ambos tipos.
+(c) Enuncie las diferencias que existen entre los dispositivos de E/S y que el SO debe
+considerar.
+2. Técnicas de E/S Describa como trabajan las siguientes técnicas de E/S
+E/S programada
+E/S dirigida por interrupciones
+DMA (Acceso Directo a Memoria)
+3. La tecnica de E/S programa puede trabajar de dos formas:
+E/S mapeada
+E/S aislada
+Indique como trabajan estas 2 técnicas.
+4. Enuncie las metas que debe perseguir un SO para la administración de la entrada salida.
+5. Drivers
+(a) ¿Qué son?
+(b) ¿Qué funciones mínimas deben proveer?
+(c) ¿Quién determina cuales deben ser estas funciones?
+6. Realice un grafico que marque la relación entre el Subsistema de E/S, los drivers, los controladores de dispositivos y los dispositivos.
+7. Describa mediante un ejemplo los pasos mínimos que se suceden desde que un proceso
+genera un requerimiento de E/S hasta que el mismo llega al dispositivo.
+8. Describa mediante un ejemplo los pasos mínimos que se suceden desde que un proceso
+genera un requerimiento de E/S hasta que el mismo llega al dispositivo.
+9. Enuncie que servicios provee el SO para la administración de E/S.
+
+Pág. 1
+
+UNLP |Facultad de Informática
+
+ISO 2024 | Práctica 6
+
+Administración de Discos
+10. Describa en forma sintética, cómo es la organización física de un disco, puede utilizar gráficos
+para mayor claridad.
+11. La velocidad promedio para la obtención de datos de un disco esta dada por la suma de los
+siguientes tiempos:
+Seek Time
+Latency Time
+Transfer Time
+De una definición para estos tres tiempos.
+12. Suponga un disco con las siguientes características:
+7 platos con 2 caras utilizables cada uno.
+1100 cilindros
+300 sectores por pista, donde cada sector de es 512 bytes.
+Seek Time de 10 ms
+9000 RPM .
+Velocidad de Transferencia de 10 MiB/s (Mebibytes por segundos).
+(a) Calcule la capacidad total del disco.
+(b) ¿Cuantos sectores ocuparía un archivo de tamaño de 3 MiB(Mebibytes)?
+(c) Calcule el tiempo de transferencia real de un archivo de 15 MiB(Mebibytes). grabado en
+el disco de manera secuencial (todos sus bloques almacenados de manera consecutiva)
+(d) Calcule el tiempo de transferencia real de un archivo de 16 MiB(Mebibytes). grabado
+en el disco de manera aleatoria.
+13. El Seek Time es el parámetro que posee mayor influencia en el tiempo real necesario para
+transferir datos desde o hacia un disco. Es importante que el SO planifique los diferentes
+requerimientos que al disco para minimizar el movimiento de la cabeza lecto-grabadora.
+Analicemos las diferentes políticas de planificación de requerimientos a disco con un
+ejemplo: Supongamos un Head con movimiento en 200 tracks (numerados de 0 a 199), que
+está en el track 83 atendiendo un requerimiento y anteriormente atendió un requerimiento
+en el track 75.
+Si la cola de requerimientos es: 86, 147, 91, 177, 94, 150, 102, 175, 130, 32, 120, 58,
+66, 115. Realice los diagramas para calcular el total de movimientos de head para satisfacer
+estos requerimientos de acuerdo a los siguientes algoritmos de scheduling de discos:
+(a) FCFS (First Come, First Served)
+(b) SSTF (Shortest Seek Time First)
+(c) Scan
+(d) Look
+(e) C-Scan (Circular Scan)
+(f) C-Look (Circular Look)
+14. ¿Alguno de los algoritmos analizados en el ejercicio anterior pueden causar inanición de
+requerimientos?
+
+Pág. 2
+
+UNLP |Facultad de Informática
+
+ISO 2024 | Práctica 6
+
+15. Supongamos un Head con movimiento en 300 pistas (numerados de 0 a 299), que esta en
+la pista 143 atendiendo un requerimiento y anteriormente atendió un requerimiento en la
+pista 125.
+Si la cola de requerimientos es: 126, 147, 81, 277, 94, 150, 212, 175, 140, 225, 280, 50,
+99, 118, 22, 55; y después de 30 movimientos se incorporan los requerimientos de las pistas
+75, 115, 220 y 266. Realice los diagramas para calcular el total de movimientos de head
+para satisfacer estos requerimientos de acuerdo a los siguientes algoritmos de scheduling de
+discos:
+(a) FCFS
+(b) SSTF
+(c) Scan
+(d) Look
+(e) C-Scan
+(f) C-Look
+16. Supongamos un Head con movimiento en 300 pistas (numerados de 0 a 299), que esta en
+la pista 140 atendiendo un requerimiento y anteriormente atendió un requerimiento en la
+pista 135.
+Si la cola de requerimientos es: 99, 110, 42, 25, 186, 270, 50, 99, 147P F , 81, 257,
+94, 133, 212, 175, 130; y después de 30 movimientos se incorporan los requerimientos de
+las pistas 85, 15P F , 202 y 288; y después de otros 40 movimientos más se incorporan los
+requerimientos de las pistas 75, 149P F , 285, 201 y 59. Realice los diagramas para calcular el
+total de movimientos de head para satisfacer estos requerimientos de acuerdo a los siguientes
+algoritmos de scheduling de discos:
+(a) FCFS
+(b) SSTF
+(c) C-Scan
+(d) Scan
+(e) Look
+(f) C-Look
+
+Administración de Archivos
+17. Dados los siguientes métodos de administración de espació de un archivo:
+Asignación contigua
+Asignación enlazada
+Asignación indexada
+(a) Describa como trabaja cada uno.
+(b) Cite ventajas y desventajas de cada uno.
+18. Gestión de espacio libre. Dados los siguientes métodos de gestión de espacio libre en un
+disco:
+Tabla de bits
+
+Pág. 3
+
+UNLP |Facultad de Informática
+
+ISO 2024 | Práctica 6
+
+Lista Ligada
+Agrupamiento
+Recuento
+(a) Describa como trabajan estos métodos.
+(b) Cite ventajas y desventajas de cada uno.
+19. Gestión de archivos en UNIX.
+El sistema de archivos de UNIX utiliza una versión modificada del esquema de Asignación Indexada para la administración de espacio de los archivos.
+Cada archivo o directorio esta representado por una estructura que mantiene, entre otra
+información, las direcciones de lo bloques que contienen los datos del archivo: el I-NODO.
+Cada I-NODO contiene 13 direcciones a los bloques de datos, organizadas de la siguiente
+manera:
+10 de direccionamiento directo.
+1 de direccionamiento indirecto simple.
+1 de direccionamiento indirecto doble.
+1 de direccionamiento indirecto triple.
+(a) Realice un grafico que describa la estructura del I-NODO y de los bloques de datos.
+Cada bloque es de 1 Kib(Kibibits). Si cada dirección para referenciar un bloque es de
+32 bits:
+i. ¿Cuántas referencias (direcciones) a bloque pueden contener un bloque de disco?
+ii. ¿Cuál sería el tamaño máximo de un archivo?
+20. Analice las siguientes fórmulas necesarias para localizar un I-NODO en la lista de inodos:
+nro bloque = ((nro de inodo -1)/nro. de inodos por bloque) + bloque de comienzo de la
+lista de inodos.
+Desplazamiento del inodo en el bloque = ((nro de inodo - 1) módulo (número de inodos
+por bloque)) * medida de inodo del disco.
+(a) Según la primer fórmula, asumiendo que en el bloque 2 está en el comienzo de la lista
+de inodos y que hay 8 inodos por bloque: calcule donde se encuentra el inodo 8 y el 9.
+¿Dónde estarían para bloque de disco de 16 inodos?
+(b) De acuerdo a la segunda fórmula, si cada inodo del disco ocupa 64 bytesy hay 8 inodos
+por bloque de disco, el inodo 8 comienza en el desplazamiento 448 del bloque de disco.
+¿Dónde empieza el 6? Si fueran inodos de 128 bytesy 24 inodos por bloque: ¿dónde
+empezaría el inodo 8?
+
+Laboratorio de Entrada-Salida
+Se recomienda resolver este laboratorio con el Sistema en modo consola y con la menor
+cantidad de programas en ejecución posible.
+21. Instale e investigue para que sirve el siguiente programa hdparm
+sudo apt-get install hdparm
+
+Pág. 4
+
+UNLP |Facultad de Informática
+
+ISO 2024 | Práctica 6
+
+22. Ahora ejecute el siguiente comando:
+sudo hdparm -I /dev/sda
+¿Cuando cilindros, cabezas y sectores tiene su disco?
+¿Que pasa si ejecuta esto en un disco de estado sólido?
+23. Ahora ejecute el siguiente comando varias veces(al menos 5), de manera tal de poder calcular
+el promedio de resultados obtenidos
+sudo hdparm
+
+/dev/sda
+
+24. Ahora ejecutelo de la siguiente manera:
+hdparm -t --direct
+
+--offset 500
+
+/dev/sda
+
+25. ¿Para que sirven los parámetros?:
+direct
+offset
+26. Compare los tiempos promedios obtenidos con los parámetros direct y offset y sin ellos(Recuerde
+comparar tiempos promedio y no ejecuciones aisladas).
+27. ¿Con que concepto de la teoría asocia el parámetro direct?
+28. Ejecute el siguiente comando:
+ls /sys/block/
+29. A que le parece que corresponde cada entrada del directorio anterior?
+30. Ejecute el siguiente comando(ajuste el dispoisitivo de disco según su equipo):
+cat /sys/block/sda/queue/scheduler
+31. Investigue el resultado del comando anterior. ¿Que quiere decir cada item del resultado?,
+investigue cada uno de ellos y asocielo con conceptos de la teoría y de esta práctica. ¿Cual
+es la diferencia entre los siguientes conceptos?
+noop
+deadline
+cfq
+Anticipatory IO
+32. Como root, ejecute el siguiente comando
+sudo echo "noop" > /sys/block/sda/queue/scheduler
+¿Cual es el efecto de esto?.Ayuda:vuelva a ejecutar
+cat /sys/block/sda/queue/scheduler
+
+Pág. 5
+
+UNLP |Facultad de Informática
+
+ISO 2024 | Práctica 6
+
+33. Ahora ejecute el siguiente programa al menos 5 veces, de manera tal de poder calcular el
+promedio del resultado obtenido
+hdparm -t --direct
+
+--offset 500
+
+/dev/sda
+
+34. Ahora del mismo modo repita el paso con las demas opciones obtenidas en el ejercicio 29 y
+compare los resultados
+¿Cual le parece que debería ser mas óptimo?
+¿Porque?
+
+Pág. 6
+
+
