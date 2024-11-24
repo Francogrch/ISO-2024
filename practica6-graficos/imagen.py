@@ -17,8 +17,8 @@ def suma_diferencias(lista):
     return suma
 
 # Datos de sectores y tiempos
-punto = 16 
-algoritmo = "SCAN"
+punto = "x" 
+algoritmo = "prueba"
 sectores = [140,147,175,15,149,186,201,202,212,257,270,288,299,133,130,110,99,94,85,84,81,75,59,50,42,25]
 tiempos = list(range(1, len(sectores) + 1))  # Tiempo secuencial desde 1 hasta el número de sectores
 
@@ -32,7 +32,10 @@ plt.xlabel("Número de Sector")
 plt.ylabel("Tiempo")
 plt.grid(True, linestyle='--', alpha=0.7)
 plt.yticks(tiempos)
-plt.xticks(sectores, rotation=45, ha='right', fontsize=10)
+#plt.xticks(sectores, fontsize=10)
+step = max(1, len(sectores) // 10)  # Reduce etiquetas si hay muchas
+plt.xticks(sectores[::step], fontsize=10, rotation=45)
+plt.tick_params(axis='x', labelrotation=45)
 plt.gca().invert_yaxis()
 plt.legend()
 
